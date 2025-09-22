@@ -4,7 +4,6 @@ import LoadingSpinner from "./components/loadingSpinner/LoadingSpinner";
 import "./scss/App.scss";
 import MainLayout from "./layout/MainLayout";
 import Customers from "./pages/Customers";
-
 function App() {
   return (
     <BrowserRouter>
