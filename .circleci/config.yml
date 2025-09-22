@@ -19,7 +19,7 @@ jobs:
           name: Deploy Over SSH
           command: |
             echo ${CIRCLE_BRANCH}
-            ssh root@103.146.22.152 "cd ${APP_PRODUCT_DIR}; git pull origin ${CIRCLE_BRANCH}; yarn build"
+            ssh root@103.146.22.152 "cd ${APP_PRODUCT_DIR}; git pull origin ${CIRCLE_BRANCH}; yarn ; yarn build"
 
 workflows:
   # deploy-develop:
