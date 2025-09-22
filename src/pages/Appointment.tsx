@@ -5,7 +5,10 @@ import {DayPilot, DayPilotCalendar} from "@daypilot/daypilot-lite-react";
 
 const Appointment: React.FC = ()=>{  
   const [calendar, setCalendar] = useState<DayPilot.Calendar>();
-
+  const [startDate, setStartDate] = useState<DayPilot.Date>(DayPilot.Date.today());
+  const previous = () => {
+    setStartDate(startDate.addDays(-7));
+  };
   const initialConfig: DayPilot.CalendarConfig = {
       viewType: "Week",
       startDate: "2026-10-01",
@@ -38,8 +41,10 @@ const Appointment: React.FC = ()=>{
   return (
     <section>
       <h2 className="title">{"Danh sách sản phẩm"}</h2>
+      <button onClick={previous}>Previous</button>
       <DayPilotCalendar
                 {...config}
+                startDate={startDate}
                 controlRef={setCalendar}
             />
     </section>
