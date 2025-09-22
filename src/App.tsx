@@ -10,8 +10,8 @@ function App() {
     <BrowserRouter>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
-            <Route path="/" element={<MainLayout />}>
-              <Route path="/customers" element={<Customers />} />
+            <Route path="/crm/" element={<MainLayout />}>
+              <Route path="/crm/customers" element={<Customers />} />
             </Route>
           </Routes>
         </Suspense>
