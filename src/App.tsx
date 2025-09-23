@@ -7,8 +7,12 @@ import Customers from "./pages/Customers";
 import Products from "./pages/Products";
 import Quotes from "./pages/Quotes";
 import Appointment from "./pages/Appointment";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
+    <>
+    <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover/>
     <BrowserRouter>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
@@ -17,11 +21,11 @@ function App() {
               <Route path="/crm/products" element={<Products />} />
               <Route path="/crm/quote" element={<Quotes />} />
               <Route path="/crm/appointment" element={<Appointment />} />
-              <Route path="/crm/products" element={<Products />} />
             </Route>
           </Routes>
         </Suspense>
     </BrowserRouter>
+    </>
   )
 }
 

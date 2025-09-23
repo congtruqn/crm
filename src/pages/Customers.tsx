@@ -30,7 +30,7 @@ const Products: React.FC = ()=>{
   const [pageSize, setPageSize] = useState(10);
   const fetchData = async (pageSize: number, pageNumber: number) => {
     try {
-        const response = await apiClient.get('/products?pageSize='+pageSize+'&pageNumber='+pageNumber); // Replace with your actual API endpoin
+        const response = await apiClient.get('/products1?pageSize='+pageSize+'&pageNumber='+pageNumber); // Replace with your actual API endpoin
         const temp = response.data?.data.map((item: { _id: unknown; detail: { name: unknown; }[]; }) => {
           return {
             key:  item._id,
@@ -47,12 +47,13 @@ const Products: React.FC = ()=>{
   };
   const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
-    fetchData(pagination.pageSize || 0, pagination.current || 0);
     setPageSize(pagination.pageSize || 10);
+    fetchData(pagination.pageSize || 0, pagination.current || 0);
   }
   useEffect(() => {
-    fetchData(10,1);
-  }, []);
+    //fetchData(10,1);
+    console.log('i fire once');
+  }, [data]);
   return (
     <section>
       <h2 className="title">{"Danh sách sản phẩm"}</h2>
