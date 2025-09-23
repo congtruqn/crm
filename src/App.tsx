@@ -9,6 +9,7 @@ import Quotes from "./pages/Quotes";
 import Appointment from "./pages/Appointment";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   return (
     <>
