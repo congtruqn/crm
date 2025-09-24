@@ -25,7 +25,10 @@ const MainLayout = () => {
           } main_wrapper`}
         >
           <TopNav />
-          <Outlet />
+          <div className="container">
+            <Outlet />
+          </div>
+          
         </div>
       </div>
     </div>

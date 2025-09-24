@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 const cookies = new Cookies();  
 const accessToken = cookies.get("accessToken");  
 const apiClient = axios.create({
-  baseURL: 'http://develop.softnests.com/api',
+  baseURL: 'https://admin.softnests.com/api',
   headers: {
     'Content-Type': 'application/json',
   },

@@ -11,7 +11,8 @@
 
   &__content {
     min-height: 100vh;
-    padding: 1rem 2.5rem 1rem 17rem;
+    padding: 0 0 0 230px;
+    background: #d9e0e7;
     transition: all 0.5s ease-in-out;
     &.close_sidebar {
       padding: 1rem 2.5rem 1rem 6rem;
