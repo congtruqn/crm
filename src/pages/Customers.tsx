@@ -72,9 +72,11 @@ const Products: React.FC = ()=>{
   return (
     <section>
       <h2 className="title">{"Danh sách sản phẩm"}</h2>
-      <Button type="primary" onClick={showDrawer}>
-        Thêm khách hàng
-      </Button>
+      <div className="panel_body_top">
+        <Button type="primary" onClick={showDrawer}>
+          Thêm khách hàng
+        </Button>
+      </div>
       <Table<DataType> columns={columns} dataSource={data} onChange={onChange}  pagination={{
         pageSize: pageSize,
         showSizeChanger: true,

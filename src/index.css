@@ -27,7 +27,7 @@ label {
 }
 .btn {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 6px 18px;
     margin-bottom: 0;
     font-size: 12px;
     font-weight: 400;
@@ -44,20 +44,46 @@ label {
     user-select: none;
     background-image: none;
     border: 1px solid transparent;
-    border-radius: 4px;
+    border-radius: 3px;
     background: #2a72b5;
     border-color: #2a72b5;
     color: #fff;
     margin-left: 10px;
-    float: right;
+}
+.btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
 }
 .btn:hover{
 	background: #008a8a;
 	border-color: #008a8a
 }
 .container{
-    margin: 10px;
-  }
+    margin: 15px;
+}
+.ant-table-content table{
+    border-radius: 0 !important;
+}
+.ant-table-content table thead{
+    border-radius: 0 !important;
+}
+.ant-spin-container{
+    background: #fff;
+}
+.ant-pagination{
+    padding: 10px;
+}
+.ant-pagination-item, .ant-pagination-options-size-changer, .ant-select-selector {
+    border-radius: 0 !important;
+    line-height: 26px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    height: 28px !important;
+}
+.ant-table-cell{
+    background: #fff !important;
+}
 @media (min-width: 768px) {
     .col-sm-3 {
         width: 25%;
@@ -67,15 +93,47 @@ label {
         width: 75%;
         float: left;
     }
+    .col-sm-6 {
+        width: 50%;
+        float: left;
+    }
     .col-sm-12 {
         width: 100%;
         float: left;
     }
 }
+.clear{
+    clear: both;
+}
 .form-group{
     overflow: hidden;
+    margin-top: 5px;
 }
-.panel-body {
+.panel-body{
     padding: 15px 0;
     display: block;
+    background: #fff;
+    text-align: right;
+}
+.panel_body_top {
+    padding: 10px;
+    display: block;
+    background: #fff;
+    text-align: right;
+}
+.ant-btn{
+    border-radius: 3px !important;
+    padding: 10px;
+    font-size: 13px;
+    height: auto;
+}
+.form-group .ant-select{
+    width: 100%;
+}
+.form-group .ant-select .ant-select-selector{
+    padding: 5px 15px;
+    height: 34px !important;
+}
+.form-group .ant-select-outlined{
+    height: auto !important;
 }
