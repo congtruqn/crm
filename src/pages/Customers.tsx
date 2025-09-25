@@ -43,7 +43,7 @@ const Products: React.FC = ()=>{
     }
   };
   const hideModal = () => {
-    setOpenModal(true);
+    setOpenModal(false);
   };
   const handleEdit = (record: string) => {
     setCustomerId(record);
