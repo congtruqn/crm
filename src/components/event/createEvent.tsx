@@ -9,7 +9,7 @@ interface MyComponentProps {
   onSubmitSuccess: (open: boolean) => void;
   onCancel: (open: boolean) => void; // Optional prop
 }
-const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSuccess, onCancel }: MyComponentProps)=>{  
+const CreateEvent: React.FC<MyComponentProps> = ({ customerId, onSubmitSuccess, onCancel }: MyComponentProps)=>{  
   const { reset, control, register, handleSubmit, setValue,  formState: { errors } } = useForm();
   const onSubmit = async (data : unknown) => {
     if(customerId){
@@ -201,4 +201,4 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
   );
 }
 
-export default CreateCustomer;
+export default CreateEvent;

@@ -9,6 +9,7 @@ import Appointment from "./pages/Appointment";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Works from "./pages/Works";
+import EventType from "./pages/EventType";
 function App() {
   return (
     <>
@@ -17,6 +18,7 @@ function App() {
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             <Route path="/crm/" element={<MainLayout />}>
+              <Route path="/crm/event-types" element={<EventType />} />
               <Route path="/crm/customers" element={<Customers />} />
               <Route path="/crm/works" element={<Works />} />
               <Route path="/crm/quote" element={<Quotes />} />

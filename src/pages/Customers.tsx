@@ -16,7 +16,7 @@ interface DataType {
 }
 
 
-const Products: React.FC = ()=>{  
+const Customer: React.FC = ()=>{  
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -25,6 +25,7 @@ const Products: React.FC = ()=>{
   const [openModal, setOpenModal] = useState(false);
   const [customerId, setCustomerId] = useState('');
   const showDrawer = () => {
+    setCustomerId('');
     setOpen(true);
   };
 
@@ -47,7 +48,7 @@ const Products: React.FC = ()=>{
   };
   const handleEdit = (record: string) => {
     setCustomerId(record);
-    showDrawer();
+    setOpen(true);
   };
   const handleDelete = (record: string) => {
     showModal();
@@ -172,4 +173,4 @@ const Products: React.FC = ()=>{
   );
 }
 
-export default Products;
+export default Customer;

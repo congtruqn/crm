@@ -6,8 +6,11 @@ import sidebarNav from "../../config/sidebarNav";
 import SidebarContext from "../../store/sidebarContext";
 import { Icon } from "@iconify/react";
 import classes from "./Sidebar.module.scss";
+import { useMyStore } from "../../store/userStore";
+import type { User } from "../../interfaces/user";
 
 function Sidebar() {
+  const value:User = useMyStore((state ) => state.value);
   const [activeIndex, setActiveIndex] = useState(0);
   const { width } = useWindowSize();
   const location = useLocation();
@@ -42,6 +45,7 @@ function Sidebar() {
       </div>
       <div className={classes.sidebar__menu}>
         {sidebarNav.map((nav, index) => (
+          nav.userTypes.includes(value.type) ? 
           <Link
             to={nav.link}
             key={`nav-${index}`}
@@ -56,7 +60,7 @@ function Sidebar() {
             <div className={classes.sidebar__menu__item__txt}>
               {nav.section}
             </div>
-          </Link>
+          </Link> : null
         ))}
       </div>
 
