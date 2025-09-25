@@ -133,7 +133,41 @@ label {
 .form-group .ant-select .ant-select-selector{
     padding: 5px 15px;
     height: 34px !important;
+    font-size: 13px;
 }
 .form-group .ant-select-outlined{
     height: auto !important;
+}
+.ant-table{
+    font-size: 13px !important;
+}
+.ant-table-cell{
+    padding: 10px 15px !important;
+}
+.form-group .ant-picker{
+    width: 100%;
+    border-radius: 0;
+    font-size: 13px !important;
+}
+.form-group .ant-picker input{
+    font-size: 13px !important;
+    padding: 1px;
+}
+.ant-table-cell svg{
+    cursor: pointer;
+}
+.ant-table-cell svg:hover{
+    color: #2a72b5;
+}
+.comfirm_title{
+    color: orange;
+    font-size: 27px;
+    display: flex;
+    margin-bottom: 10px;
+}
+.comfirm_title label{
+    font-size: 20px;
+    margin: 0 0 0 10px;
+    line-height: 30px;
+    padding: 0 !important;
 }

@@ -16,7 +16,7 @@ interface DataType {
 }
 
 
-const Products: React.FC = ()=>{  
+const Works: React.FC = ()=>{  
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -133,7 +133,7 @@ const Products: React.FC = ()=>{
   }, [current, pageSize]);
   return (
     <section>
-      <h2 className="title">{"Danh sách khách hàng"}</h2>
+      <h2 className="title">{"Danh sách công việc"}</h2>
       <div className="panel_body_top">
         <Button type="primary" onClick={showDrawer}>
           Thêm khách hàng
@@ -147,7 +147,7 @@ const Products: React.FC = ()=>{
       }}/>
       <Drawer
       
-          title="Thêm khách hàng"
+          title="Thêm công việc"
           width={900}
           closable={true}
           onClose={onClose}
@@ -172,4 +172,4 @@ const Products: React.FC = ()=>{
   );
 }
 
-export default Products;
+export default Works;
