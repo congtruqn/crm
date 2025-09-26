@@ -3,7 +3,7 @@ import { Button, Drawer, Modal, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 import apiClient from "../api/apiClient";
 import CreateCustomer from "../components/customer/createCustomer";
-import { getEvaluate } from "../constants/masterData";
+import { getCustomerStatus, getEvaluate } from "../constants/masterData";
 import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
 
@@ -108,7 +108,7 @@ const Customer: React.FC = ()=>{
             name: item.name,
             phone_number: item.phone_number,
             evaluate: getEvaluate(item.evaluate),
-            status: item.evaluate,
+            status: getCustomerStatus(item.status),
           }
         })
         setData(temp);

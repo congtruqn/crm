@@ -1,25 +1,29 @@
 import { DatePicker, Select } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import apiClient from "../../api/apiClient";
-import { customerStatus, evaluates } from "../../constants/masterData";
 import type { Customers } from "../../interfaces/customer";
+import { removeUnicode } from "../../utils";
+import moment from "moment";
 interface MyComponentProps {
-  customerId: string,
+  id: string,
   onSubmitSuccess: (open: boolean) => void;
   onCancel: (open: boolean) => void; // Optional prop
 }
-const CreateEvent: React.FC<MyComponentProps> = ({ customerId, onSubmitSuccess, onCancel }: MyComponentProps)=>{  
+const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel }: MyComponentProps)=>{  
   const { reset, control, register, handleSubmit, setValue,  formState: { errors } } = useForm();
+  const [evenTypes, setEvenTypes] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const onSubmit = async (data : unknown) => {
-    if(customerId){
-      const rep = await apiClient.put('customer/'+customerId, data);
+    if(id){
+      const rep = await apiClient.put('event/'+id, data);
       if(rep.status == 200){
         reset();
       }
     }
     else{
-        const rep = await apiClient.post('customer', data);
+        const rep = await apiClient.post('event', data);
         if(rep.status == 200){
           reset();
         }
@@ -31,57 +35,167 @@ const CreateEvent: React.FC<MyComponentProps> = ({ customerId, onSubmitSuccess, 
     reset();
     onCancel(true); // Pass form data to parent
   };
-  const getCustomerInfo = async (customerId: string): Promise<Customers | undefined> => {
+  const onSearch = (data : string) => {
+    getCustomers(data)
+    console.log(data)
+  };
+  
+  const getData = async (id: string): Promise<Customers | undefined> => {
     try {
-        const response = await apiClient.get('/customer/'+customerId); // Replace with your actual API endpoin
+        const response = await apiClient.get('/event/'+id); // Replace with your actual API endpoin
         const temp = response.data;
         if(temp){
-          setValue("name", temp.name);
-          setValue("demand", temp.demand);
+          setValue("event_type_id", temp.event_type?._id);
+          setValue("customer_id", temp.customer?._id);
+          setValue("note", temp.note);
+          setValue("user_id", temp.user?._id);
           setValue("phone_number", temp.phone_number);
-          setValue("email", temp.email);
-          setValue("company", temp.company);
-          setValue("address", temp.address);
-          setValue("taxcode", temp.taxcode);
-          setValue("status", temp.status);
-          setValue("evaluate", temp.evaluate);
-          //setValue("next_contact_date", moment(temp.next_contact_date));
+          setValue("is_notice", temp.is_notice);
+          setValue("processed", temp.processed);
+          setValue("event_date", moment(temp.from_date));
         }
         return temp;
     } catch (err) {
       console.log(err);
     }
   };
+  const getEventType = async () => {
+    try {
+        const response = await apiClient.get('/event-types'); // Replace with your actual API endpoin
+        const data =  response.data?.data.map((item: {_id: string, name: string}) => {
+          return {
+            value: item._id,
+            label: item?.name || '', 
+          }
+        })
+        setEvenTypes(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const getEmployees = async () => {
+    try {
+        const response = await apiClient.get('/employees'); // Replace with your actual API endpoin
+        const data =  response.data?.data.map((item: {_id: string, name: string}) => {
+          return {
+            value: item._id,
+            label: item?.name || '', 
+          }
+        })
+        setEmployees(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const getCustomers = async (keyword: string) => {
+    try {
+        const response = await apiClient.get('/customers?keyword='+keyword); // Replace with your actual API endpoin
+        const data =  response.data?.data.map((item: {_id: string, name: string}) => {
+          return {
+            value: item._id,
+            label: item?.name || '', 
+          }
+        })
+        setCustomers(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
-    if(customerId){
-      getCustomerInfo(customerId);
+    if(id){
+      getData(id);
     }
     else{
       reset();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customerId, onSubmitSuccess]);
+  }, [id, onSubmitSuccess]);
+  useEffect(() => {
+    getEventType()
+    getEmployees()
+    getCustomers('')
+  }, []);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="row">
 
-        <div className="form-group col-sm-12">
+        <div className="form-group col-sm-6">
           <label className="col-sm-12 control-label">
-            Tên khách hàng
+            Công việc
           </label>
           <div className="col-sm-12">
-            <input {...register('name', { required: true })} className="form-control"/>
-            {errors.name && <span className="error">This field is required</span>}
+          <Controller
+              name="event_type_id" // Name for the form field
+              control={control}
+              rules={{ required: true }} // React Hook Form validation rules
+              render={({ field }) => (
+                <Select
+                  {...field} // Binds value and onChange from React Hook Form
+                  placeholder="Chọn công việc"
+                  options={evenTypes}
+                >
+                </Select>
+              )}
+            />
+            {errors.status && <span className="error">Vui lòng chọn công việc</span>}
+          </div>
+        </div>
+
+        <div className="form-group col-sm-6">
+          <label className="col-sm-12 control-label">
+            Khách hàng
+          </label>
+          <div className="col-sm-12">
+          <Controller
+              name="customer_id" // Name for the form field
+              control={control}
+              rules={{ required: true }} // React Hook Form validation rules
+              render={({ field }) => (
+                <Select
+                  {...field} // Binds value and onChange from React Hook Form
+                  placeholder="Chọn khách hàng"
+                  options={customers}
+                  showSearch
+                  onSearch={onSearch}
+                  filterOption={(input, option) =>
+                    (removeUnicode(option?.label ?? '')).toLowerCase().includes(removeUnicode(input.toLowerCase()))
+                  }
+                >
+                </Select>
+              )}
+            />
+            {errors.status && <span className="error">Vui lòng chọn công việc</span>}
           </div>
         </div>
 
         <div className="form-group col-sm-12">
           <label className="col-sm-12 control-label">
-            Nhu cầu
+            Nhân viên thực hiện
           </label>
           <div className="col-sm-12">
-            <input {...register('demand', { required: true })} className="form-control"/>
-            {errors.name && <span className="error">Nhu cầu của khách hàng bắt buộc nhập</span>}
+          <Controller
+              name="user_id" // Name for the form field
+              control={control}
+              rules={{ required: false }} // React Hook Form validation rules
+              render={({ field }) => (
+                <Select
+                  {...field} // Binds value and onChange from React Hook Form
+                  placeholder="Chọn đánh giá"
+                  options={employees}
+                >
+                </Select>
+              )}
+            />
+          </div>
+        </div>       
+
+        <div className="form-group col-sm-12">
+          <label className="col-sm-12 control-label">
+            Ghi chú
+          </label>
+          <div className="col-sm-12">
+            <textarea {...register('note', { required: false })} className="form-control"/>
+            {errors.note && <span className="error">Nhu cầu của khách hàng bắt buộc nhập</span>}
           </div>
         </div>
 
@@ -90,98 +204,44 @@ const CreateEvent: React.FC<MyComponentProps> = ({ customerId, onSubmitSuccess, 
             Số điện thoại
           </label>
           <div className="col-sm-12">
-            <input {...register('phone_number', { required: true })} className="form-control"/>
-            {errors.name && <span className="error">Số điện thoại bắt buộc nhập</span>}
-          </div>
-        </div>
-        <div className="form-group col-sm-6">
-          <label className="col-sm-12 control-label">
-            Email
-          </label>
-          <div className="col-sm-12">
-            <input {...register('email', { required: false })} className="form-control"/>
-          </div>
-        </div>
-
-        <div className="form-group col-sm-12">
-          <label className="col-sm-12 control-label">
-            Tên công ty
-          </label>
-          <div className="col-sm-12">
-            <input {...register('company', { required: false })} className="form-control"/>
-          </div>
-        </div>
-
-        <div className="form-group col-sm-12">
-          <label className="col-sm-12 control-label">
-            Địa chỉ
-          </label>
-          <div className="col-sm-12">
-            <input {...register('address', { required: false })} className="form-control"/>
+            <input {...register('phone_number', { required: false })} className="form-control"/>
           </div>
         </div>
 
         <div className="form-group col-sm-6">
           <label className="col-sm-12 control-label">
-            Mã số thuế
-          </label>
-          <div className="col-sm-12">
-            <input {...register('taxcode', { required: false })} className="form-control"/>
-          </div>
-        </div>
-
-
-        <div className="form-group col-sm-6">
-          <label className="col-sm-12 control-label">
-            Đánh giá
+            Tạo nhắc lịch
           </label>
           <div className="col-sm-12">
           <Controller
-              name="evaluate" // Name for the form field
+              name="is_notice" // Name for the form field
               control={control}
-              rules={{ required: true }} // React Hook Form validation rules
+              rules={{ required: false }} // React Hook Form validation rules
               render={({ field }) => (
                 <Select
                   {...field} // Binds value and onChange from React Hook Form
-                  placeholder="Chọn đánh giá"
-                  options={evaluates}
+                  placeholder="Chọn"
+                  options={[
+                    { value: 0 , label: 'Không'},
+                    { value: 1 , label: 'Có'},
+                  ]}
+                  value={0}
                 >
                 </Select>
               )}
             />
-            {errors.evaluate && <span className="error">This field is required</span>}
           </div>
         </div>
 
-        <div className="form-group col-sm-6">
-          <label className="col-sm-12 control-label">
-            Trạng thái
-          </label>
-          <div className="col-sm-12">
-          <Controller
-              name="status" // Name for the form field
-              control={control}
-              rules={{ required: true }} // React Hook Form validation rules
-              render={({ field }) => (
-                <Select
-                  {...field} // Binds value and onChange from React Hook Form
-                  placeholder="Chọn trạng thái"
-                  options={customerStatus}
-                >
-                </Select>
-              )}
-            />
-            {errors.status && <span className="error">This field is required</span>}
-          </div>
-        </div>
+
 
         <div className="form-group col-sm-6">
           <label className="col-sm-12 control-label">
-            Ngày liên hệ tiếp theo
+            Ngày thực hiện
           </label>
           <div className="col-sm-12">
           <Controller
-              name="next_contact_date" // Name for the form field
+              name="event_date" // Name for the form field
               control={control}
               rules={{ required: false }} // React Hook Form validation rules
               render={({ field }) => (
@@ -190,6 +250,34 @@ const CreateEvent: React.FC<MyComponentProps> = ({ customerId, onSubmitSuccess, 
             />
           </div>
         </div>
+
+
+        <div className="form-group col-sm-6">
+          <label className="col-sm-12 control-label">
+            Trạng thái
+          </label>
+          <div className="col-sm-12">
+          <Controller
+              name="processed" // Name for the form field
+              control={control}
+              rules={{ required: false }} // React Hook Form validation rules
+              render={({ field }) => (
+                <Select
+                  {...field} // Binds value and onChange from React Hook Form
+                  placeholder="Chọn"
+                  options={[
+                    { value: 0 , label: 'Chưa hoàn thành'},
+                    { value: 1 , label: 'Đã hoàn thành'},
+                  ]}
+                  value={0}
+                >
+                </Select>
+              )}
+            />
+            {errors.status && <span className="error">Vui lòng chọn công việc</span>}
+          </div>
+        </div>
+
 
       </div>
       <div className="clear"></div>

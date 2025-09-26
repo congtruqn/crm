@@ -6,6 +6,7 @@ import { getEvaluate } from "../constants/masterData";
 import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
 import CreateEvent from "../components/event/createEvent";
+import type { Events } from "../interfaces/event";
 
 interface DataType {
     key: React.Key;
@@ -23,7 +24,7 @@ const Works: React.FC = ()=>{
   const [current, setCurrent] = useState(1);
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [customerId, setCustomerId] = useState('');
+  const [id, setId] = useState('');
   const showDrawer = () => {
     setOpen(true);
   };
@@ -36,7 +37,7 @@ const Works: React.FC = ()=>{
   };
 
  const comfirmDelete = async () => {
-    const response = await apiClient.delete('/events/'+customerId);
+    const response = await apiClient.delete('/events/'+id);
     if(response.status == 200){
       fetchData(pageSize, current);
       setOpenModal(false);
@@ -46,12 +47,12 @@ const Works: React.FC = ()=>{
     setOpenModal(true);
   };
   const handleEdit = (record: string) => {
-    setCustomerId(record);
+    setId(record);
     showDrawer();
   };
   const handleDelete = (record: string) => {
     showModal();
-    setCustomerId(record);
+    setId(record);
   };
   const columns: TableColumnsType<DataType> = [
     {
@@ -61,19 +62,23 @@ const Works: React.FC = ()=>{
     },
     {
       title: 'Tên khách hàng',
-      dataIndex: 'name',
+      dataIndex: 'customer',
     },
     {
-      title: 'SĐT',
-      dataIndex: 'phone_number',
+      title: 'Công việc',
+      dataIndex: 'event_type',
     },
     {
-      title: 'Đánh giá',
-      dataIndex: 'evaluate',
+      title: 'Nhân viên',
+      dataIndex: 'user',
     },
     {
       title: 'Trạng thái',
-      dataIndex: 'status',
+      dataIndex: 'processed',
+    },
+    {
+      title: 'Ngày thực hiện',
+      dataIndex: 'from_date',
     },
     {
       title: '',
@@ -99,15 +104,16 @@ const Works: React.FC = ()=>{
   const fetchData = async (pageSize: number, pageNumber: number) => {
     try {
         const response = await apiClient.get('/events?pageSize='+pageSize+'&pageNumber='+pageNumber); // Replace with your actual API endpoin
-        const temp = response.data?.data.map((item: Customers, index: number) => {
+        const temp = response.data?.data.map((item: Events, index: number) => {
           return {
             key:  item._id,
             id: item._id,
             count: current + index,
-            name: item.name,
-            phone_number: item.phone_number,
-            evaluate: getEvaluate(item.evaluate),
-            status: item.evaluate,
+            customer: item.customer,
+            event_type: item.event_type,
+            user: item.user,
+            processed: item.processed,
+            from_date: item.from_date
           }
         })
         setData(temp);
@@ -153,7 +159,7 @@ const Works: React.FC = ()=>{
           onClose={onClose}
           open={open}
         >
-          <CreateEvent customerId={customerId} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
+          <CreateEvent id={id} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
       </Drawer>
       <Modal
         title=""

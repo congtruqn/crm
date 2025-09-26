@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 const cookies = new Cookies();  
 const accessToken = cookies.get("accessToken");  
 const apiClient = axios.create({
-  baseURL: 'https://admin.softnests.com/api',
+  baseURL: import.meta.env.VITE_API,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -71,7 +71,7 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
           </label>
           <div className="col-sm-12">
             <input {...register('name', { required: true })} className="form-control"/>
-            {errors.name && <span className="error">This field is required</span>}
+            {errors.name && <span className="error">Tên khách hàng bắt buộc nhập</span>}
           </div>
         </div>
 
@@ -81,7 +81,7 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
           </label>
           <div className="col-sm-12">
             <input {...register('demand', { required: true })} className="form-control"/>
-            {errors.name && <span className="error">Nhu cầu của khách hàng bắt buộc nhập</span>}
+            {errors.demand && <span className="error">Nhu cầu của khách hàng bắt buộc nhập</span>}
           </div>
         </div>
 
@@ -91,7 +91,7 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
           </label>
           <div className="col-sm-12">
             <input {...register('phone_number', { required: true })} className="form-control"/>
-            {errors.name && <span className="error">Số điện thoại bắt buộc nhập</span>}
+            {errors.phone_number && <span className="error">Số điện thoại bắt buộc nhập</span>}
           </div>
         </div>
         <div className="form-group col-sm-6">
@@ -149,7 +149,7 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
                 </Select>
               )}
             />
-            {errors.evaluate && <span className="error">This field is required</span>}
+            {errors.evaluate && <span className="error">Đánh giá bắt buộc nhập</span>}
           </div>
         </div>
 
@@ -171,7 +171,7 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
                 </Select>
               )}
             />
-            {errors.status && <span className="error">This field is required</span>}
+            {errors.status && <span className="error">Trạng thái bắt buộc nhập</span>}
           </div>
         </div>
 

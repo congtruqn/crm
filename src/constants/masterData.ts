@@ -53,3 +53,20 @@ export const customerStatus = [
         label: 'Đã mua chổ khác',
     },
 ]
+export const getCustomerStatus = function(value: number){
+  switch (value) {
+      case 1:
+          return 'Đã điện thoại';
+      case 2:
+          return 'Đã báo giá';
+      case 3:
+          return 'Đã mua';
+      case 4:
+          return 'Đã đến xem xe';
+      case 5:
+          return 'Đã mua chổ khác';
+      default:
+          break;
+  }
+
+}
