@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Drawer, Modal, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 import apiClient from "../api/apiClient";
-import { getEvaluate } from "../constants/masterData";
-import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
 import CreateEvent from "../components/event/createEvent";
 import type { Events } from "../interfaces/event";
