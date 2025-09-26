@@ -29,7 +29,9 @@ apiClient.interceptors.response.use(
       error.response.status < 500;
 
     if (!expectedError) {
-      toast.error('An unexpected error occurred.');
+      error.response?.data?.errors.forEach((element: { msg: string} )=> {
+        toast.error(element.msg || 'Lỗi hệ thống');
+      });
     } else if (error.response.status === 401) {
       // Handle unauthorized errors, e.g., redirect to login
       toast.warn('Unauthorized. Please login in again.');
@@ -37,7 +39,9 @@ apiClient.interceptors.response.use(
     } else if (error.response.data && error.response.data.message) {
       toast.error(error.response.data.message);
     } else {
-      toast.error('An error occurred during the request.');
+      error.response?.data?.errors.forEach((element: { msg: string} )=> {
+        toast.error(element.msg || 'Lỗi hệ thống');
+      });
     }
 
     return Promise.reject(error);

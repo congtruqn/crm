@@ -102,7 +102,12 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
     }
   };
   useEffect(() => {
-    if(id){
+    getEventType()
+    getEmployees()
+    getCustomers('')
+  }, []);
+  useEffect(() => {
+    if(id && employees && evenTypes && customers){
       getData(id);
     }
     else{
@@ -110,11 +115,7 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, onSubmitSuccess]);
-  useEffect(() => {
-    getEventType()
-    getEmployees()
-    getCustomers('')
-  }, []);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="row">
@@ -243,11 +244,12 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
           <Controller
               name="event_date" // Name for the form field
               control={control}
-              rules={{ required: false }} // React Hook Form validation rules
+              rules={{ required: true }} // React Hook Form validation rules
               render={({ field }) => (
                 <DatePicker {...field} showTime />
               )}
             />
+            {errors.event_date && <span className="error">Thời gian thực hiện không được để trống</span>}
           </div>
         </div>
 
