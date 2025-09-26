@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {DayPilot, DayPilotCalendar} from "@daypilot/daypilot-lite-react";
 import { Modal, Input } from 'antd';
+import moment from 'moment-timezone';
+import apiClient from "../api/apiClient";
+import type { Events } from "../interfaces/event";
 
 
 const Appointment: React.FC = ()=>{  
@@ -10,6 +13,10 @@ const Appointment: React.FC = ()=>{
   const [inputValue, setInputValue] = useState('');
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const startOfWeek = moment().startOf('isoWeek');
+  const endOfWeek = moment().endOf('isoWeek');
+  const startOfWeekISO = startOfWeek.toISOString();
+  const endOfWeekISO = endOfWeek.toISOString();
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -46,12 +53,12 @@ const Appointment: React.FC = ()=>{
 
   const onEventClick = (e: unknown) => {
     console.log(e);
-    setIsModalOpen(true)
+    //setIsModalOpen(true)
   };
   const initialConfig: DayPilot.CalendarConfig = {
       viewType: "Week",
       startDate: "2026-10-01",
-      locale: "en-us",
+      locale: "vi-vn",
       timeRangeSelectedHandling: "Enabled",
       cellHeight: 25,
       businessBeginsHour: 8,
@@ -80,28 +87,36 @@ const Appointment: React.FC = ()=>{
   };
   const [config, setConfig ] = useState(initialConfig);
   console.log(setConfig);
-  useEffect(() => {
 
-    if (!calendar || calendar?.disposed()) {
-        return;
-    }
-    const events: DayPilot.EventData[] = [
-        {
-            id: 1,
+  const fetchData = async (calendar: DayPilot.Calendar | undefined, fromDate: string, toDate: string) => {
+    try {
+        const response = await apiClient.get('/get-event-by-date?fromDate='+fromDate+'&toDate='+toDate); // Replace with your actual API endpoin
+        //console.log(response.data?.data);
+        const events:DayPilot.EventData[] = response.data?.data.map((item: Events) => {
+          return {
+            id: item._id,
             text: "Event 1",
-            start: "2025-09-24T08:30:00",
-            end: "2025-09-24T13:00:00",
+            start: moment(item.from_date).tz("Asia/Bangkok").add(7,'hours').format(),
+            end: moment(item.to_date).tz("Asia/Bangkok").add(7,'hours').format(),
             tags: {
-                participants: 2,
+              participants: 2,
             },
-            html: "Khách hàng</br>Gửi báo giá"
-        },
-        
-        // ...
-        
-    ];
+            html: `Khách hàng: ${item.customer} </br> ${item.event_type}`
+          }
+        })
+        console.log(calendar);
+        if (!calendar || calendar?.disposed()) {
+          return;
+        }
+        console.log(events);
+        calendar.update({events});
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    calendar.update({events});
+  useEffect(() => {
+    fetchData(calendar, startOfWeekISO,endOfWeekISO)
 }, [calendar]);
   return (
     <section>

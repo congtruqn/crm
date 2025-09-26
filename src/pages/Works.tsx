@@ -35,7 +35,7 @@ const Works: React.FC = ()=>{
   };
 
  const comfirmDelete = async () => {
-    const response = await apiClient.delete('/events/'+id);
+    const response = await apiClient.delete('/event/'+id);
     if(response.status == 200){
       fetchData(pageSize, current);
       setOpenModal(false);

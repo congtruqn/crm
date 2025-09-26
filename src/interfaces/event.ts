@@ -4,6 +4,7 @@ export interface Events {
     customer: string
     user: string
     from_date: string
+    to_date: string
     processed: string
     status: number
   }
