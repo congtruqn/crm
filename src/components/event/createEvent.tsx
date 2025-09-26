@@ -225,7 +225,7 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
                     { value: 0 , label: 'Không'},
                     { value: 1 , label: 'Có'},
                   ]}
-                  value={0}
+                  defaultValue={0}
                 >
                 </Select>
               )}
@@ -269,7 +269,7 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
                     { value: 0 , label: 'Chưa hoàn thành'},
                     { value: 1 , label: 'Đã hoàn thành'},
                   ]}
-                  value={0}
+                  defaultValue={0}
                 >
                 </Select>
               )}

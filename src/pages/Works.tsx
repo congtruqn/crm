@@ -111,7 +111,7 @@ const Works: React.FC = ()=>{
             event_type: item.event_type,
             user: item.user,
             processed: item.processed,
-            from_date: moment(item.from_date).tz("Asia/Bangkok").format('DD/MM/YY HH:mm:ss'),
+            from_date: moment(item.from_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
           }
         })
         setData(temp);

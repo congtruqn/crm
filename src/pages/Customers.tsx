@@ -114,7 +114,7 @@ const Customer: React.FC = ()=>{
             phone_number: item.phone_number,
             evaluate: getEvaluate(item.evaluate),
             status: getCustomerStatus(item.status),
-            next_contact_date: moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YY HH:mm:ss'),
+            next_contact_date: moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
 
           }
         })
