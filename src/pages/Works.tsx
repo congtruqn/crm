@@ -5,7 +5,7 @@ import apiClient from "../api/apiClient";
 import { Icon } from "@iconify/react";
 import CreateEvent from "../components/event/createEvent";
 import type { Events } from "../interfaces/event";
-
+import moment from 'moment-timezone';
 interface DataType {
     key: React.Key;
     id: string,
@@ -111,7 +111,7 @@ const Works: React.FC = ()=>{
             event_type: item.event_type,
             user: item.user,
             processed: item.processed,
-            from_date: item.from_date
+            from_date: moment(item.from_date).tz("Asia/Bangkok").format('DD/MM/YY HH:mm:ss'),
           }
         })
         setData(temp);

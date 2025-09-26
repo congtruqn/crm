@@ -6,6 +6,7 @@ import CreateCustomer from "../components/customer/createCustomer";
 import { getCustomerStatus, getEvaluate } from "../constants/masterData";
 import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
+import moment from 'moment-timezone';
 
 interface DataType {
     key: React.Key;
@@ -77,6 +78,10 @@ const Customer: React.FC = ()=>{
       dataIndex: 'status',
     },
     {
+      title: 'Ngày liên hệ tiếp theo',
+      dataIndex: 'next_contact_date',
+    },
+    {
       title: '',
       key: 'edit',
       width: '15px',
@@ -109,6 +114,8 @@ const Customer: React.FC = ()=>{
             phone_number: item.phone_number,
             evaluate: getEvaluate(item.evaluate),
             status: getCustomerStatus(item.status),
+            next_contact_date: moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YY HH:mm:ss'),
+
           }
         })
         setData(temp);
