@@ -77,9 +77,9 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
       console.log(err);
     }
   };
-  const fetchData = async (pageSize: number, pageNumber: number) => {
+  const fetchData = async (customerId: string ,pageSize: number, pageNumber: number) => {
     try {
-        const response = await apiClient.get('/events?pageSize='+pageSize+'&pageNumber='+pageNumber); // Replace with your actual API endpoin
+        const response = await apiClient.get('/events?pageSize='+pageSize+'&pageNumber='+pageNumber+'&customerId='+customerId); // Replace with your actual API endpoin
         const temp = response.data?.data.map((item: Events, index: number) => {
           return {
             key:  item._id,
@@ -105,8 +105,8 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customerId]);
   useEffect(() => {
-      fetchData(10,1);
-  }, [current, pageSize]);
+      fetchData(customerId, 10,1);
+  }, [customerId,current, pageSize]);
   return (
     <>
       <div className="row">
