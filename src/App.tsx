@@ -14,14 +14,19 @@ import { LoadingProvider } from "./store/LoadingContext";
 import GlobalLoader from "./components/loading/GlobalLoader";
 //import { getToken } from 'firebase/messaging';
 import { onMessageListener, requestForToken } from "./config/firebase-config"
+import { useNotiStore } from "./store/notiStore";
 
 function App() {
+  const value = useNotiStore((state ) => state.value);
+  const { setValue } = useNotiStore();
   useEffect(() => {
     requestForToken()
   }, []);
   useEffect(() => {
     onMessageListener().then((data) => {
-       console.log("Receive foreground: ",data)
+      const num  = value + 1;
+      setValue(num);
+      console.log("Receive foreground: ",data)
     })
   })
   return (
