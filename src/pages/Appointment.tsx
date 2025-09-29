@@ -11,7 +11,6 @@ const Appointment: React.FC = ()=>{
   const [calendar, setCalendar] = useState<DayPilot.Calendar>();
   const [startDate, setStartDate] = useState<DayPilot.Date>(DayPilot.Date.today());
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [inputValue, setInputValue] = useState('');
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const startOfWeek = moment().startOf('isoWeek');
@@ -27,16 +26,7 @@ const Appointment: React.FC = ()=>{
     if (!calendar || calendar?.disposed()) {
       return;
     }
-    calendar.events.add({
-      id: 1,
-      text: "1111",
-      start: from,
-      end: to,
-      tags: {
-          participants: 2,
-      },
-      html: inputValue
-    });
+    console.log(from,to)
     // Perform actions when OK is clicked
   };
   const handleCancel = () => {
