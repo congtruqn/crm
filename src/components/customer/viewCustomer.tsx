@@ -66,7 +66,7 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
   const onChange: TableProps<DataType>['onChange'] = (pagination) => {
       setPageSize(pagination.pageSize || 10);
       setCurrent(pagination.current || 1);
-      //fetchData(pagination.pageSize || 0, pagination.current || 0);
+      fetchData(customerId, pagination.pageSize || 0, pagination.current || 0);
   }
   const getCustomerInfo = async (customerId: string): Promise<void> => {
     try {
@@ -106,7 +106,7 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
   }, [customerId]);
   useEffect(() => {
       fetchData(customerId, 10,1);
-  }, [customerId,current, pageSize]);
+  }, [customerId]);
   return (
     <>
       <div className="row">

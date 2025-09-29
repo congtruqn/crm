@@ -134,7 +134,7 @@ const Works: React.FC = ()=>{
   };
   useEffect(() => {
     fetchData(10,1);
-  }, [current, pageSize]);
+  }, []);
   return (
     <section>
       <h2 className="title">{"Danh sách công việc"}</h2>
