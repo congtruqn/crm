@@ -156,7 +156,7 @@ const Customer: React.FC = ()=>{
   };
   useEffect(() => {
     fetchData(10,1);
-  }, []);
+  }, [current, pageSize]);
   return (
     <section>
       <h2 className="title">{"Danh sách khách hàng"}</h2>

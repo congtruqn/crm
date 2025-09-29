@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {DayPilot, DayPilotCalendar} from "@daypilot/daypilot-lite-react";
-import { Modal, Input } from 'antd';
+import { Drawer } from 'antd';
 import moment from 'moment-timezone';
 import apiClient from "../api/apiClient";
 import type { Events } from "../interfaces/event";
+import CreateEvent from "../components/event/createEvent";
 
 
 const Appointment: React.FC = ()=>{  
@@ -28,19 +29,15 @@ const Appointment: React.FC = ()=>{
     }
     calendar.events.add({
       id: 1,
-      text: "",
+      text: "1111",
       start: from,
       end: to,
       tags: {
           participants: 2,
       },
       html: inputValue
-  });
+    });
     // Perform actions when OK is clicked
-  };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -60,29 +57,18 @@ const Appointment: React.FC = ()=>{
       startDate: "2026-10-01",
       locale: "vi-vn",
       timeRangeSelectedHandling: "Enabled",
-      cellHeight: 25,
+      cellHeight: 40,
+      headerHeight: 40,
+      height: 600,
       businessBeginsHour: 8,
       businessEndsHour: 18,
+      durationBarVisible: true,
       onTimeRangeSelected: async (args) => {
-        //console.log(_args);
           const scheduler = args.control;
-          //const modal = DayPilot.Modal.showUrl(<MyModal />);
           scheduler.clearSelection(); // Clear the selection after user interaction
-
-          // console.log(args);
-          // if (modal.canceled) {
-          //     return;
-          // }
           showModal();
           setFrom(args.start?.toString())
           setTo(args.end?.toString())
-          // scheduler.events.add({
-          //     start: args.start,
-          //     end: args.end,
-          //     id: DayPilot.guid(), // Generate a unique ID for the event
-          //     resource: args.resource, // If using resources
-          //     text: "inputValue"
-          // });
       },
   };
   const [config, setConfig ] = useState(initialConfig);
@@ -98,7 +84,7 @@ const Appointment: React.FC = ()=>{
             text: "Event 1",
             start: moment(item.from_date).tz("Asia/Bangkok").add(7,'hours').format(),
             end: moment(item.to_date).tz("Asia/Bangkok").add(7,'hours').format(),
-            html: `Khách hàng: ${item.customer} </br> ${item.event_type}`
+            html: `Khách hàng: ${item.customer} <br> ${item.event_type}`
           }
         })
         if (!calendar || calendar?.disposed()) {
@@ -115,23 +101,26 @@ const Appointment: React.FC = ()=>{
 }, [calendar]);
   return (
     <section>
-      <h2 className="title">{"Danh sách sản phẩm"}</h2>
+      <h2 className="title">{"Lịch"}</h2>
+      <div className="container">
+        <DayPilotCalendar
+            {...config}
+            startDate={startDate}
+            controlRef={setCalendar}
+            onEventClick={onEventClick}
+            
+        />
+      </div>
       <button onClick={previous}>Previous</button>
-      <DayPilotCalendar
-          {...config}
-          startDate={startDate}
-          controlRef={setCalendar}
-          onEventClick={onEventClick}
-      />
-       <Modal
-              title="Basic Modal"
-              open={isModalOpen} 
-              onOk={handleOk} 
-              onCancel={handleCancel}
-            >
-        <p>Some content in the modal...</p>
-        <Input value={inputValue} onChange={handleChange} />
-      </Modal>
+      <Drawer
+          title="Thêm công việc"
+          width={900}
+          closable={true}
+          onClose={handleCancel}
+          open={isModalOpen}
+        >
+          <CreateEvent id={''} onCancel={handleOk} onSubmitSuccess={handleCancel}/>
+      </Drawer>
     </section>
   );
 }
