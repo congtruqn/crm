@@ -28,7 +28,7 @@ const Appointment: React.FC = ()=>{
     }
     calendar.events.add({
       id: 1,
-      text: "Event 1",
+      text: "",
       start: from,
       end: to,
       tags: {
@@ -98,17 +98,12 @@ const Appointment: React.FC = ()=>{
             text: "Event 1",
             start: moment(item.from_date).tz("Asia/Bangkok").add(7,'hours').format(),
             end: moment(item.to_date).tz("Asia/Bangkok").add(7,'hours').format(),
-            tags: {
-              participants: 2,
-            },
             html: `Khách hàng: ${item.customer} </br> ${item.event_type}`
           }
         })
-        console.log(calendar);
         if (!calendar || calendar?.disposed()) {
           return;
         }
-        console.log(events);
         calendar.update({events});
     } catch (err) {
       console.log(err);

@@ -7,6 +7,7 @@ import { getCustomerStatus, getEvaluate } from "../constants/masterData";
 import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
 import moment from 'moment-timezone';
+import ViewCustomer from "../components/customer/viewCustomer";
 
 interface DataType {
     key: React.Key;
@@ -24,6 +25,7 @@ const Customer: React.FC = ()=>{
   const [current, setCurrent] = useState(1);
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openViewCustomer, setOpenViewCustomer] = useState(false);
   const [customerId, setCustomerId] = useState('');
   const showDrawer = () => {
     setCustomerId('');
@@ -32,6 +34,13 @@ const Customer: React.FC = ()=>{
 
   const onClose = () => {
     setOpen(false);
+  };
+  const onViewCustomer = (id: string) => {
+    setCustomerId(id);
+    setOpenViewCustomer(true);
+  };
+  const closeViewCustomer = () => {
+    setOpenViewCustomer(false);
   };
   const showModal = () => {
     setOpenModal(true);
@@ -64,6 +73,15 @@ const Customer: React.FC = ()=>{
     {
       title: 'Tên khách hàng',
       dataIndex: 'name',
+      onCell: (record) => {
+        return {
+          onClick: ()=> {
+            onViewCustomer(record?.id);
+            //console.log('Clicked Address cell:', record, rowIndex);
+            // Perform actions specific to the Address column
+          },
+        };
+      },
     },
     {
       title: 'SĐT',
@@ -147,14 +165,23 @@ const Customer: React.FC = ()=>{
           Thêm khách hàng
         </Button>
       </div>
-      <Table<DataType> columns={columns} dataSource={data} onChange={onChange}  pagination={{
+      <Table<DataType> columns={columns} dataSource={data} onChange={onChange}
+              // onRow={(record) => {
+              //   return {
+              //     onClick: () => {
+              //       console.log(record)
+              //       onViewCustomer(record?.id);
+              //     },
+              //   };
+              // }}
+      pagination={{
         pageSize: pageSize,
         showSizeChanger: true,
         total: total,
         pageSizeOptions: ['10', '20', '50'],
+        
       }}/>
       <Drawer
-      
           title="Thêm khách hàng"
           width={900}
           closable={true}
@@ -162,6 +189,15 @@ const Customer: React.FC = ()=>{
           open={open}
         >
           <CreateCustomer customerId={customerId} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
+      </Drawer>
+      <Drawer
+          title="Thông tin khách hàng"
+          width={900}
+          closable={true}
+          onClose={closeViewCustomer}
+          open={openViewCustomer}
+        >
+          <ViewCustomer customerId={customerId}/>
       </Drawer>
       <Modal
         title=""

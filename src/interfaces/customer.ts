@@ -14,6 +14,6 @@ export interface Customers {
     create_user: string
     create_name: string
     create_date: string
-    __v: number
+    __v?: number
   }
   

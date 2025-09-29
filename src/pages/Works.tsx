@@ -98,7 +98,7 @@ const Works: React.FC = ()=>{
         </>
       ),
     },
-];
+  ];
   const fetchData = async (pageSize: number, pageNumber: number) => {
     try {
         const response = await apiClient.get('/events?pageSize='+pageSize+'&pageNumber='+pageNumber); // Replace with your actual API endpoin

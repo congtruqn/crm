@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoadingSpinner from "./components/loadingSpinner/LoadingSpinner";
 import "./scss/App.scss";
@@ -12,7 +12,18 @@ import Works from "./pages/Works";
 import EventType from "./pages/EventType";
 import { LoadingProvider } from "./store/LoadingContext";
 import GlobalLoader from "./components/loading/GlobalLoader";
+//import { getToken } from 'firebase/messaging';
+import { onMessageListener, requestForToken } from "./config/firebase-config"
+
 function App() {
+  useEffect(() => {
+    requestForToken()
+  }, []);
+  useEffect(() => {
+    onMessageListener().then((data) => {
+       console.log("Receive foreground: ",data)
+    })
+  })
   return (
     <>
     <ToastContainer position="top-right" autoClose={3000} hideProgressBar={true} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable/>
