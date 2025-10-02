@@ -198,5 +198,11 @@ label {
     color: #fff;
     border-radius: 3px;
     padding: 1px 3px;
-    font: 8px Verdana;
+    font: 11px Verdana;
+}
+.calendar_default_rowheader_inner{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
 }

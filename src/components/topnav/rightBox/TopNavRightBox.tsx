@@ -11,7 +11,7 @@ function TopNavRightBox() {
       <div className={classes.wrapper}>
       <div className={classes.lang}>
         <div className="notification-container">
-        <Icon icon="iconamoon:notification-thin" width="20" />
+        <Icon icon="iconamoon:notification-thin" width="25" />
           <span className="notification-counter">{value}</span>
         </div>
       </div>

@@ -14,6 +14,7 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
   const onSubmit = async (data : unknown) => {
     if(customerId){
       const rep = await apiClient.put('customer/'+customerId, data);
+      console.log(rep);
       if(rep.status == 200){
         reset();
       }

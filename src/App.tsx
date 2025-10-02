@@ -15,12 +15,27 @@ import GlobalLoader from "./components/loading/GlobalLoader";
 //import { getToken } from 'firebase/messaging';
 import { onMessageListener, requestForToken } from "./config/firebase-config"
 import { useNotiStore } from "./store/notiStore";
+import type { User } from "./interfaces/user";
+import { useMyStore } from "./store/userStore";
+import apiClient from "./api/apiClient";
 
 function App() {
+  const user:User = useMyStore((state ) => state.value);
   const value = useNotiStore((state ) => state.value);
   const { setValue } = useNotiStore();
   useEffect(() => {
-    requestForToken()
+    const fetchData = async () => {
+      try {
+        const fcm_token = await requestForToken()
+        if(fcm_token != user.fcm_token){
+          await apiClient.put('user-fmc-token/'+user._id, { fcm_token: fcm_token });
+          console.log("Token already saved in database.")
+        }
+      } catch (err) {
+        console.error('Fetch error: ', err);
+      } finally { /* empty */ }
+    };
+    fetchData()
   }, []);
   useEffect(() => {
     onMessageListener().then((data) => {

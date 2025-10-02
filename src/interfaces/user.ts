@@ -5,6 +5,7 @@ export interface User {
     phone: string
     email: string
     address: string
+    fcm_token: string
     customer_id: number
     name: string
     type: number

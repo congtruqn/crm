@@ -18,6 +18,8 @@ export const requestForToken = async () => {
     const currentToken = await getToken(messaging, { vapidKey: 'BBb879_GnQ207xY87r01JT9-W23dXa2mYYcnNvIG5-dhB-MdC3rtLoDoILwEcv_SEFB_uNdjpcCKFAZcZCUdp_I' });
     if (currentToken) {
       console.log('FCM Registration Token:', currentToken);
+      return currentToken;
+      
       // Send the token to your server to store and use for sending notifications
     } else {
       console.log('No registration token available. Requesting permission to generate one.');
