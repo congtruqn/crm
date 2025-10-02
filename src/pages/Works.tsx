@@ -106,7 +106,7 @@ const Works: React.FC = ()=>{
           return {
             key:  item._id,
             id: item._id,
-            count: current + index,
+            count: ((current -1) * pageSize) + index + 1,
             customer: item.customer,
             event_type: item.event_type,
             user: item.user,
