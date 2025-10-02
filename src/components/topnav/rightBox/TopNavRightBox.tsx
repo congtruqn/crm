@@ -22,8 +22,7 @@ function TopNavRightBox() {
       <div className={classes.wrapper}>
       <div className={classes.lang}>
         <div className="notification-container">
-        <Link to={"/crm/notifications"} onClick={updateNoti}><Icon icon="iconamoon:notification-thin" width="25" /></Link>
-          <span className="notification-counter">{value}</span>
+        <Link to={"/crm/notifications"} onClick={updateNoti}><Icon icon="iconamoon:notification-thin" width="25" /><span className="notification-counter">{value}</span></Link>
         </div>
       </div>
       <Profile />

@@ -28,7 +28,7 @@ function App() {
     const fetchData = async () => {
       try {
         const fcm_token = await requestForToken()
-        if(fcm_token != user.fcm_token){
+        if(fcm_token != user.fcm_token || !user.fcm_token){
           await apiClient.put('user-fmc-token/'+user._id, { fcm_token: fcm_token });
           console.log("Token already saved in database.")
         }
