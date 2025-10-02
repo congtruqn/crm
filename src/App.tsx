@@ -18,6 +18,7 @@ import { useNotiStore } from "./store/notiStore";
 import type { User } from "./interfaces/user";
 import { useMyStore } from "./store/userStore";
 import apiClient from "./api/apiClient";
+import Notifications from "./pages/Notifications";
 
 function App() {
   const user:User = useMyStore((state ) => state.value);
@@ -35,7 +36,19 @@ function App() {
         console.error('Fetch error: ', err);
       } finally { /* empty */ }
     };
+    const getNoti = async () => {
+      try {
+          const noti = await apiClient.get('notifications');
+          if(noti){
+            setValue(noti.data?.unRead || 0);
+          }
+      } catch (err) {
+        console.error('Fetch error: ', err);
+      } finally { /* empty */ }
+    };
     fetchData()
+    getNoti();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     onMessageListener().then((data) => {
@@ -58,6 +71,7 @@ function App() {
               <Route path="/crm/works" element={<Works />} />
               <Route path="/crm/quote" element={<Quotes />} />
               <Route path="/crm/appointment" element={<Appointment />} />
+              <Route path="/crm/notifications" element={<Notifications />} />
             </Route>
           </Routes>
         </Suspense>

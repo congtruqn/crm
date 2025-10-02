@@ -8,3 +8,12 @@ export interface Events {
     processed: string
     status: number
   }
+
+  export interface Noti {
+    _id: string
+    event_type: string
+    customer: string
+    user: string
+    create_date: string
+    is_read: number
+  }
