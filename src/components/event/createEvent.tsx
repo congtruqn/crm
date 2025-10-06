@@ -5,28 +5,37 @@ import apiClient from "../../api/apiClient";
 import type { Customers } from "../../interfaces/customer";
 import { removeUnicode } from "../../utils";
 import moment from "moment";
+import { useDateStore } from "../../store/dateStore";
 interface MyComponentProps {
   id: string,
   onSubmitSuccess: (open: boolean) => void;
   onCancel: (open: boolean) => void; // Optional prop
 }
-const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel }: MyComponentProps)=>{  
+const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel }: MyComponentProps)=>{ 
+  const from = useDateStore((state ) => state.from);
+  const to = useDateStore((state ) => state.to);
   const { reset, control, register, handleSubmit, setValue,  formState: { errors } } = useForm();
   const [evenTypes, setEvenTypes] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [customers, setCustomers] = useState([]);
   const onSubmit = async (data : unknown) => {
+
     if(id){
-      const rep = await apiClient.put('event/'+id, data);
-      if(rep.status == 200){
-        reset();
-      }
-    }
-    else{
-        const rep = await apiClient.post('event', data);
+      if(typeof data == 'object'){
+        const rep = await apiClient.put('event/'+id, { from, to, ...data });
         if(rep.status == 200){
           reset();
         }
+      }
+    }
+    else{
+      if(typeof data == 'object'){
+        const rep = await apiClient.post('event', { from, to, ...data });
+        if(rep.status == 200){
+          reset();
+        }
+      }
+
     }
     onSubmitSuccess(true); // Pass form data to parent
   };

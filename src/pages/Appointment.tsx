@@ -5,14 +5,14 @@ import moment from 'moment-timezone';
 import apiClient from "../api/apiClient";
 import type { Events } from "../interfaces/event";
 import CreateEvent from "../components/event/createEvent";
+import { useDateStore } from "../store/dateStore";
 
 
-const Appointment: React.FC = ()=>{  
+const Appointment: React.FC = ()=>{ 
+  const { setFrom, setTo } = useDateStore();
   const [calendar, setCalendar] = useState<DayPilot.Calendar>();
   const [startDate, setStartDate] = useState<DayPilot.Date>(DayPilot.Date.today());
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
   const startOfWeek = moment().startOf('isoWeek');
   const endOfWeek = moment().endOf('isoWeek');
   const startOfWeekISO = startOfWeek.toISOString();
@@ -26,7 +26,7 @@ const Appointment: React.FC = ()=>{
     if (!calendar || calendar?.disposed()) {
       return;
     }
-    console.log(from,to)
+    //console.log(from,to)
     // Perform actions when OK is clicked
   };
   const handleCancel = () => {

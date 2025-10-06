@@ -17,3 +17,11 @@ export interface Events {
     create_date: string
     is_read: number
   }
+  export interface newEvent {
+    note: string
+    phone_number: string
+    event_type_id: string
+    customer_id: string
+    user_id: string
+    event_date: string
+  }
