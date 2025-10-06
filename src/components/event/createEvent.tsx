@@ -46,7 +46,6 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
   };
   const onSearch = (data : string) => {
     getCustomers(data)
-    console.log(data)
   };
   
   const getData = async (id: string): Promise<Customers | undefined> => {

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Button, Drawer, Modal, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 import apiClient from "../api/apiClient";
-import CreateCustomer from "../components/customer/createCustomer";
 import { getCustomerStatus, getEvaluate } from "../constants/masterData";
 import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
 import moment from 'moment-timezone';
-import ViewCustomer from "../components/customer/viewCustomer";
+import CreateQuote from "../components/quote/createQuote";
+import ViewQuote from "../components/quote/viewQuote";
 
 interface DataType {
     key: React.Key;
@@ -188,16 +188,16 @@ const Quotes: React.FC = ()=>{
           onClose={onClose}
           open={open}
         >
-          <CreateCustomer customerId={customerId} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
+          <CreateQuote customerId={customerId} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
       </Drawer>
       <Drawer
-          title="Thông tin khách hàng"
+          title="Xem báo giá"
           width={900}
           closable={true}
           onClose={closeViewCustomer}
           open={openViewCustomer}
         >
-          <ViewCustomer customerId={customerId}/>
+          <ViewQuote customerId={customerId}/>
       </Drawer>
       <Modal
         title=""
