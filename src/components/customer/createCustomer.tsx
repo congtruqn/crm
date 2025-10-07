@@ -4,6 +4,13 @@ import { Controller, useForm } from "react-hook-form";
 import apiClient from "../../api/apiClient";
 import { customerStatus, evaluates } from "../../constants/masterData";
 import type { Customers } from "../../interfaces/customer";
+import dayjs from "dayjs";
+import weekday from 'dayjs/plugin/weekday'; // Import the plugin
+import localeData from 'dayjs/plugin/localeData'; 
+import 'dayjs/locale/vi';
+dayjs.locale('vi');
+dayjs.extend(weekday);
+dayjs.extend(localeData); 
 interface MyComponentProps {
   customerId: string,
   onSubmitSuccess: (open: boolean) => void;
@@ -63,6 +70,7 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customerId, onSubmitSuccess]);
   return (
+    
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="row">
 
@@ -185,13 +193,14 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
               name="next_contact_date" // Name for the form field
               control={control}
               rules={{ required: false }} // React Hook Form validation rules
+              defaultValue={dayjs()}
               render={({ field }) => (
-                <DatePicker {...field} showTime />
+                <DatePicker {...field} showTime  format="DD/MM/YYYY HH:mm"
+                /> 
               )}
             />
           </div>
         </div>
-
       </div>
       <div className="clear"></div>
       <div className="panel-body">

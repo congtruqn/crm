@@ -115,6 +115,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ customerId, onSubmitSuccess, 
         {fields.map((field, index) => (
           <div key={field.id}> {/* field.id is essential for React's key prop */}
             <div className="col-sm-12 form-group">
+              
               <Controller
                   name={`items.${index}.product`} // Name for the form field
                   control={control}
@@ -139,8 +140,11 @@ const CreateQuote: React.FC<MyComponentProps> = ({ customerId, onSubmitSuccess, 
             
           </div>
         ))}
+        <div className="col-sm-12 form-group">
+            <button type="button" onClick={() => append({ name: '', value: "", product: '' })} className="btn btn-secondary m-r-5 m-b-5">Thêm SP</button>
+        </div>
 
-<button type="button" onClick={() => append({ name: '', value: "", product: '' })} className="btn btn-secondary m-r-5 m-b-5">Thêm SP</button>
+
 
 
       </div>

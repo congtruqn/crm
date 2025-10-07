@@ -4,7 +4,13 @@ import { Controller, useForm } from "react-hook-form";
 import apiClient from "../../api/apiClient";
 import type { Customers } from "../../interfaces/customer";
 import { removeUnicode } from "../../utils";
-import moment from "moment";
+import dayjs from "dayjs";
+import weekday from 'dayjs/plugin/weekday'; // Import the plugin
+import localeData from 'dayjs/plugin/localeData'; 
+import 'dayjs/locale/vi';
+dayjs.locale('vi');
+dayjs.extend(weekday);
+dayjs.extend(localeData); 
 import { useDateStore } from "../../store/dateStore";
 interface MyComponentProps {
   id: string,
@@ -60,7 +66,7 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
           setValue("phone_number", temp.phone_number);
           setValue("is_notice", temp.is_notice);
           setValue("processed", temp.processed);
-          setValue("event_date", moment(temp.from_date));
+          setValue("event_date", dayjs(temp.from_date));
         }
         return temp;
     } catch (err) {
@@ -260,7 +266,6 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
             {errors.event_date && <span className="error">Thời gian thực hiện không được để trống</span>}
           </div>
         </div>
-
 
         <div className="form-group col-sm-6">
           <label className="col-sm-12 control-label">
