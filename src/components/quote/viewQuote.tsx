@@ -7,13 +7,14 @@ interface MyComponentProps {
 
 const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentProps)=>{
   const [data, setData] = useState<Quote>({
-    customer: '',
-    amount: 0,
-    text_amount: '',
-    create_date: '',
-    customerId: '',
-    _id: '',
-    quote_details: []
+        _id: "string",
+        customer: "string",
+        customerId: "string",
+        create_date: "string",
+        amount: 0,
+        text_amount: "string",
+        quote_details:[],
+        invoiceNumber: "string",
   });
   const getCustomerInfo = async (customerId: string): Promise<void> => {
     try {
