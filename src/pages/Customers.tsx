@@ -127,7 +127,7 @@ const Customer: React.FC = ()=>{
           return {
             key:  item._id,
             id: item._id,
-            count: ((current -1) * pageSize) + index + 1,
+            count: ((pageNumber -1) * pageSize) + index + 1,
             name: item.name,
             phone_number: item.phone_number,
             evaluate: getEvaluate(item.evaluate),
