@@ -5,7 +5,8 @@ export interface Quote {
     create_date: string
     amount: number
     text_amount: string
-    quote_details: QuoteDetail[]
+    quote_details: QuoteDetail[],
+    invoiceNumber: string,
   }
   
   export interface QuoteDetail {
@@ -13,7 +14,7 @@ export interface Quote {
     product: string
     price: number
     unit: string
+    quantity: number
     total: number
     description: string
   }
-  
