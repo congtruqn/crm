@@ -3,6 +3,7 @@ export interface Quote {
     customer: string
     customerId: string
     create_date: string
+    user: string
     amount: number
     text_amount: string
     items: QuoteDetail[],

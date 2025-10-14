@@ -13,6 +13,7 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)
         create_date: "string",
         amount: 0,
         text_amount: "string",
+        user: "string",
         items:[],
         invoiceNumber: "string",
   });

@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Button, Drawer, Modal, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 import apiClient from "../api/apiClient";
-import { getCustomerStatus, getEvaluate } from "../constants/masterData";
-import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
 import moment from 'moment-timezone';
 import CreateQuote from "../components/quote/createQuote";
 import ViewQuote from "../components/quote/viewQuote";
+import type { Quote } from "../interfaces/quote";
 
 interface DataType {
     key: React.Key;
@@ -72,7 +71,7 @@ const Quotes: React.FC = ()=>{
     },
     {
       title: 'Tên khách hàng',
-      dataIndex: 'name',
+      dataIndex: 'customer',
       onCell: (record) => {
         return {
           onClick: ()=> {
@@ -84,20 +83,24 @@ const Quotes: React.FC = ()=>{
       },
     },
     {
-      title: 'SĐT',
-      dataIndex: 'phone_number',
+      title: 'Người tạo',
+      dataIndex: 'user',
     },
     {
-      title: 'Đánh giá',
-      dataIndex: 'evaluate',
+      title: 'Số tiền',
+      dataIndex: 'amount',
     },
     {
-      title: 'Trạng thái',
-      dataIndex: 'status',
+      title: 'Ngày tạo',
+      dataIndex: 'create_date',
     },
     {
-      title: 'Ngày liên hệ tiếp theo',
-      dataIndex: 'next_contact_date',
+      title: 'Tải',
+      render: (_: unknown, record: DataType) => (
+        <>
+          <Icon icon={'mingcute:edit-line'} onClick={() => handleEdit(record.id)}/>
+        </>
+      ),
     },
     {
       title: '',
@@ -123,16 +126,15 @@ const Quotes: React.FC = ()=>{
   const fetchData = async (pageSize: number, pageNumber: number) => {
     try {
         const response = await apiClient.get('/quotes?pageSize='+pageSize+'&pageNumber='+pageNumber); // Replace with your actual API endpoin
-        const temp = response.data?.data.map((item: Customers, index: number) => {
+        const temp = response.data?.data.map((item: Quote, index: number) => {
           return {
             key:  item._id,
             id: item._id,
             count: ((current -1) * pageSize) + index + 1,
-            name: item.name,
-            phone_number: item.phone_number,
-            evaluate: getEvaluate(item.evaluate),
-            status: getCustomerStatus(item.status),
-            next_contact_date: moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
+            customer: item.customer,
+            user: item.user,
+            amount: item.amount,
+            create_date: moment(item.create_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
 
           }
         })
