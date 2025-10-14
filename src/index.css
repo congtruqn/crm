@@ -219,3 +219,22 @@ label {
 .col-md-3 {
     width: 25%;
 }
+.table-bordered{
+    padding: 10px;
+}
+.table-bordered td{
+    padding: 5px;
+    vertical-align: top;
+}
+.ant-input-number{
+    border-radius: 0;
+    height: 34px;
+}
+.table-bordered .ant-select-selector{
+    height: 34px !important;
+}
+.table-bordered textarea{
+    resize: none;
+    margin-top: 10px;
+    height: 70px;
+}

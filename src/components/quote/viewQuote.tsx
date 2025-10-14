@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import apiClient from "../../api/apiClient";
 import type { Quote } from "../../interfaces/quote";
 interface MyComponentProps {
-  customerId: string,
+  quoteId: string,
 }
 
-const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentProps)=>{
+const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)=>{
   const [data, setData] = useState<Quote>({
         _id: "string",
         customer: "string",
@@ -13,7 +13,7 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
         create_date: "string",
         amount: 0,
         text_amount: "string",
-        quote_details:[],
+        items:[],
         invoiceNumber: "string",
   });
   const getCustomerInfo = async (customerId: string): Promise<void> => {
@@ -26,11 +26,11 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
     }
   };
   useEffect(() => {
-    if(customerId){
-      getCustomerInfo(customerId);
+    if(quoteId){
+      getCustomerInfo(quoteId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customerId]);
+  }, [quoteId]);
   return (
     <>
       <div className="row">

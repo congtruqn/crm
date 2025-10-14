@@ -5,7 +5,7 @@ export interface Quote {
     create_date: string
     amount: number
     text_amount: string
-    quote_details: QuoteDetail[],
+    items: QuoteDetail[],
     invoiceNumber: string,
   }
   

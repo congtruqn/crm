@@ -179,7 +179,7 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
                 </Select>
               )}
             />
-            {errors.status && <span className="error">Vui lòng chọn công việc</span>}
+            {errors.status && <span className="error">Vui lòng chọn khách hàng</span>}
           </div>
         </div>
 

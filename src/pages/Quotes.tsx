@@ -26,9 +26,9 @@ const Quotes: React.FC = ()=>{
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openViewCustomer, setOpenViewCustomer] = useState(false);
-  const [customerId, setCustomerId] = useState('');
+  const [quoteId, setQuoteId] = useState('');
   const showDrawer = () => {
-    setCustomerId('');
+    setQuoteId('');
     setOpen(true);
   };
 
@@ -36,7 +36,7 @@ const Quotes: React.FC = ()=>{
     setOpen(false);
   };
   const onViewCustomer = (id: string) => {
-    setCustomerId(id);
+    setQuoteId(id);
     setOpenViewCustomer(true);
   };
   const closeViewCustomer = () => {
@@ -47,7 +47,7 @@ const Quotes: React.FC = ()=>{
   };
 
  const comfirmDelete = async () => {
-    const response = await apiClient.delete('/customer/'+customerId);
+    const response = await apiClient.delete('/quote/'+quoteId);
     if(response.status == 200){
       fetchData(pageSize, current);
       setOpenModal(false);
@@ -57,12 +57,12 @@ const Quotes: React.FC = ()=>{
     setOpenModal(false);
   };
   const handleEdit = (record: string) => {
-    setCustomerId(record);
+    setQuoteId(record);
     setOpen(true);
   };
   const handleDelete = (record: string) => {
     showModal();
-    setCustomerId(record);
+    setQuoteId(record);
   };
   const columns: TableColumnsType<DataType> = [
     {
@@ -188,7 +188,7 @@ const Quotes: React.FC = ()=>{
           onClose={onClose}
           open={open}
         >
-          <CreateQuote customerId={customerId} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
+          <CreateQuote quoteId={quoteId} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
       </Drawer>
       <Drawer
           title="Xem báo giá"
@@ -197,7 +197,7 @@ const Quotes: React.FC = ()=>{
           onClose={closeViewCustomer}
           open={openViewCustomer}
         >
-          <ViewQuote customerId={customerId}/>
+          <ViewQuote quoteId={quoteId}/>
       </Drawer>
       <Modal
         title=""
