@@ -13,7 +13,7 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)
   useEffect(() => {
     const fetchHtml = async () => {
       try {
-        const response = await fetch('http://develop.softnests.com/view-quote');
+        const response = await fetch(`${import.meta.env.VITE_API}`+'/view-quote');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
