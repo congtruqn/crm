@@ -223,11 +223,11 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
           <table className="table table-bordered">
             <thead>
               <tr>
-                <th style={{width: '30%'}}>Sản phẩm</th>
-                <th style={{width: '15%'}}>Đơn giá</th>
-                <th style={{width: '5%'}}>Số lượng</th>
+                <th style={{width: '30%', textAlign: "left"}}>Sản phẩm</th>
+                <th style={{width: '15%' , textAlign: "right"}}>Đơn giá</th>
+                <th style={{width: '5%', textAlign: "center"}}>SL</th>
                 <th style={{width: '10%'}}>ĐVT</th>
-                <th style={{width: '10%'}}>Thành tiền</th>
+                <th style={{width: '10%' ,textAlign: "right"}}>Thành tiền</th>
                 <th style={{width: '5%'}}></th>
               </tr>
             </thead>
@@ -279,7 +279,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
                           <InputNumber
                             {...field} // Spreads onChange, onBlur, value, and name props
                             min={1}
-                            style={{ width: '100%' }}
+                            style={{ width: '100%',textAlign: "right" }}
                             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             onChange={(e) => {
                               field.onChange(e); 
@@ -299,6 +299,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
                   <td>
                     <input
                       type="number"
+                      style={{textAlign: "right" }}
                       {...register(`items.${index}.quantity`, { required: true, min: 1 })}
                       className="form-control"
                       onChange={(e) => {
@@ -319,7 +320,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
                     />
                     {errors.items?.[index]?.unit && <span className="error">Đơn vị tính</span>}
                   </td>
-                  <td>
+                  <td style={{textAlign: 'right', alignContent: 'left', alignItems: 'left'}}>
                   {watch(`items.${index}.total`).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} đ
                   <input
                       type="hidden"
@@ -327,7 +328,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
                       className="form-control"
                     />
                   </td>
-                  <td>
+                  <td style={{textAlign: 'left', alignContent: 'left', alignItems: 'left'}} className="table-actions">
                     <button type="button" onClick={() => remove(index)} className="btn btn-danger">Xóa</button>
                   </td>
                 </tr>
@@ -336,7 +337,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
           </table>
         </div>
 
-        <div className="col-sm-12 form-group">
+        <div className="col-sm-12 form-group add_more">
             <button type="button" onClick={() => append({ name: '', product_id: '', unit: '', quantity: 0 , price: 0, total: 0, description: ''})} className="btn btn-secondary m-r-5 m-b-5">Thêm SP</button>
         </div>
         <div>
@@ -346,9 +347,11 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
             className="form-control"
           />
         </div>
-      <div>Tổng cộng: {grandTotal} đ</div>
-      <div>Tổng cộng: {currencyFormatter(grandTotal)}</div>
-
+        <div className="clear"></div>
+        <div className="amount" >
+          <div>Tổng cộng: {grandTotal} đ</div>
+          <div>Tổng cộng: {currencyFormatter(grandTotal)}</div>
+        </div>
       </div>
       <div className="clear"></div>
       <div className="panel-body">
