@@ -101,13 +101,13 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
         const response = await apiClient.get('/quote/'+id);
         for(const key in response.data){
           if(key === 'items'){
-            const items = response.data[key].map((item: { product_id: string; quantity: number; unit: string; price: number; total: number, description: string}) => ({
+            const items = response.data[key].map((item: { product_id: string; quantity: number; unit: string; price: number; total: number, product_more_info: []}) => ({
               product_id: item.product_id,
               quantity: item.quantity,
               unit: item.unit,
               price: item.price,
               total: item.total,
-              description: item.description,
+              description: item.product_more_info.map((it: { info_name: string, info_value: string })=> it.info_name + ': ' + it.info_value).join('/n'),
             }));
             setValue(key, items);
             setValue('customer_id', response.data['customerId']);
@@ -151,12 +151,12 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
   const getProducts = async (keyword: string) => {
     try {
         const response = await apiClient.get('/products?keyword='+keyword); // Replace with your actual API endpoin
-        const data =  response.data?.data.map((item: {_id: string, detail: { name: string, description: string }[], price: number,}) => {
+        const data =  response.data?.data.map((item: {_id: string, detail: { name: string, description: string }[], price: number, product_more_info: { info_value: string, info_name: string }[]}) => {
           return {
             value: item._id,
             label: item?.detail[0]?.name || '',
             price: item.price || 0,
-            description: item?.detail[0]?.description || '',
+            description: item.product_more_info.map((it: { info_name: string, info_value: string })=> it.info_name + ': ' + it.info_value).join('\n'),
           }
         })
         setProducts(data);
