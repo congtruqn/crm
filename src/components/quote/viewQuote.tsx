@@ -27,9 +27,23 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)
     fetchHtml();
   }, []);
   const generatePdf = async () => {
-    document.body.innerHTML = htmlContent; // Replace body content with printable content
-    window.print(); // Trigger print dialog
-    document.body.innerHTML = htmlContent;
+    //Allow for borders.
+    const leftPosition = (window.screen.width / 2) - ((1000 / 2) + 10);
+    //Allow for title and status bars.
+    const topPosition = (window.screen.height / 2) - ((800 / 2) + 50);
+    const winPrint = window.open('', '', 'left = '+leftPosition+',top='+topPosition+',width=1000,height=800,toolbar=0,scrollbars=0,status=0');
+    if(winPrint){
+      winPrint.document.write(htmlContent);
+      winPrint.document.close();
+      winPrint.focus();
+      winPrint.print();
+      winPrint.close(); 
+    }
+
+    // const originalContents = document.body.innerHTML;
+    // document.body.innerHTML = htmlContent; // Replace body content with printable content
+    // window.open().print(); // Trigger print dialog
+    // document.body.innerHTML = originalContents; 
   };
   return (
     <>
