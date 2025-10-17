@@ -157,7 +157,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
             value: item._id,
             label: item?.detail[0]?.name || '',
             price: item.price || 0,
-            description: item.product_more_info?.map((it: { info_name: string, info_value: string })=> it.info_name + ': ' + it.info_value).join('\n'),
+            description: item.product_more_info?.map((it: { info_name: string, info_value: string })=> it.info_name + ': ' + it.info_value).join('<br/>') || '',
           }
         })
         setProducts(data);

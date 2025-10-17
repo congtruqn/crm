@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { useMyStore } from "../../store/userStore";
 import type { User } from "../../interfaces/user";
 interface MyComponentProps {
@@ -29,28 +27,9 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)
     fetchHtml();
   }, []);
   const generatePdf = async () => {
-    if (contentRef.current) {
-      const canvas = await html2canvas(contentRef.current);
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4'); // 'p' for portrait, 'mm' for units, 'a4' for format
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save('document.pdf');
-    }
+    document.body.innerHTML = htmlContent; // Replace body content with printable content
+    window.print(); // Trigger print dialog
+    document.body.innerHTML = htmlContent;
   };
   return (
     <>
