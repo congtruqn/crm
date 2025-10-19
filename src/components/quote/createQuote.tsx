@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import apiClient from "../../api/apiClient";
-import { Select, InputNumber } from "antd";
+import { Select, InputNumber, DatePicker } from "antd";
 import { removeUnicode } from "../../utils";
-//import type { Quote } from "../../interfaces/quote";
+import dayjs from "dayjs";
+import weekday from 'dayjs/plugin/weekday'; // Import the plugin
+import localeData from 'dayjs/plugin/localeData'; 
+import 'dayjs/locale/vi';
+dayjs.locale('vi');
+dayjs.extend(weekday);
+dayjs.extend(localeData); 
 export interface SelectInterface {
     value: string
     label: string
@@ -70,6 +76,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
   const { watch, reset, control, register, handleSubmit, setValue,  formState: { errors } } = useForm({
     defaultValues: {
       email: '',
+      create_date: dayjs(),
       customer_id: '',
       amount: 0,
       text_amount: '',
@@ -157,7 +164,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
             value: item._id,
             label: item?.detail[0]?.name || '',
             price: item.price || 0,
-            description: item.product_more_info?.map((it: { info_name: string, info_value: string })=> it.info_name + ': ' + it.info_value).join('<br/>') || '',
+            description: item.product_more_info?.map((it: { info_name: string, info_value: string })=> it.info_name + ': ' + it.info_value).join('\n') || '',
           }
         })
         setProducts(data);
@@ -211,7 +218,23 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
           </div>
         </div>
 
-        <div className="form-group col-sm-12">
+        <div className="form-group col-sm-6">
+          <label className="col-sm-12 control-label">
+            Ngày thực hiện
+          </label>
+          <div className="col-sm-12">
+          <Controller
+              name="create_date" // Name for the form field
+              control={control}
+              rules={{ required: false }}
+              defaultValue={dayjs()}
+              render={({ field }) => (
+                <DatePicker {...field} showTime />
+              )}
+            />
+          </div>
+        </div>
+        <div className="form-group col-sm-6">
           <label className="col-sm-12 control-label">
             Email
           </label>
@@ -219,7 +242,6 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
             <input {...register('email', { required: false })} className="form-control"/>
           </div>
         </div>
-
         <div>
           <table className="table table-bordered">
             <thead>

@@ -95,14 +95,6 @@ const Quotes: React.FC = ()=>{
       dataIndex: 'create_date',
     },
     {
-      title: 'Tải',
-      render: (_: unknown, record: DataType) => (
-        <>
-          <Icon icon={'mingcute:edit-line'} onClick={() => handleEdit(record.id)}/>
-        </>
-      ),
-    },
-    {
       title: '',
       key: 'edit',
       width: '15px',
@@ -135,7 +127,6 @@ const Quotes: React.FC = ()=>{
             user: item.user,
             amount: item.amount,
             create_date: moment(item.create_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
-
           }
         })
         setData(temp);

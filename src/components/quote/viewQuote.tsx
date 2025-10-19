@@ -12,7 +12,7 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)
   useEffect(() => {
     const fetchHtml = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BASE_URL}`+'/view-quote?customer_id=+'+value.customer_id+'+&quoteId='+quoteId);
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}`+'/view-quote?customer_id='+value.customer_id+'&quoteId='+quoteId);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -47,7 +47,12 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)
   };
   return (
     <>
-    <button onClick={generatePdf}>Generate PDF</button>
+    <div className="panel_body_top">
+        <button onClick={generatePdf} className="ant-btn css-dev-only-do-not-override-1odpy5d ant-btn-primary ant-btn-color-primary ant-btn-variant-solid">In báo giá</button>
+        <br></br>
+        <br></br>
+    </div>
+    
     <div ref={contentRef} dangerouslySetInnerHTML={{ __html: htmlContent }} />
     </>
   );
