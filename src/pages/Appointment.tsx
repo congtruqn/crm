@@ -36,6 +36,9 @@ const Appointment: React.FC = ()=>{
   const previous = () => {
     setStartDate(startDate.addDays(-7));
   };
+  const next = () => {
+    setStartDate(startDate.addDays(+7));
+  };
 
 
   const onEventClick = (e: unknown) => {
@@ -92,7 +95,11 @@ const Appointment: React.FC = ()=>{
   return (
     <section>
       <h2 className="title">{"Lịch"}</h2>
-      <div className="container">
+      <div className="calenda_panel">
+      <button className="daypilot_button" onClick={previous}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14 17.308L8.692 12L14 6.692l.708.708l-4.6 4.6l4.6 4.6z"/></svg></button>
+      <button className="daypilot_button" onClick={next}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m13.292 12l-4.6-4.6l.708-.708L14.708 12L9.4 17.308l-.708-.708z"/></svg></button>
+      </div>
+      <div className="container_p">
         <DayPilotCalendar
             {...config}
             startDate={startDate}
@@ -106,7 +113,7 @@ const Appointment: React.FC = ()=>{
             }}
         />
       </div>
-      <button onClick={previous}>Previous</button>
+      
       <Drawer
           title="Thêm công việc"
           width={900}

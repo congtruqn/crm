@@ -290,3 +290,40 @@ label {
     flex: 1;
     font-size: 13px;
 }
+.calendar_default_cell_inner,
+.calendar_default_rowheader_inner,
+
+.calendar_default_corner_inner{
+    background: #fff !important;
+}
+.calendar_default_rowheader_inner, .calendar_default_cornerright_inner, .calendar_default_corner_inner, .calendar_default_colheader_inner, .calendar_default_alldayheader_inner {
+    color: var(--dp-calendar-header-color);
+    background: #fff !important;
+}
+.daypilot_button{
+    width: 40px;
+    background: #fff;
+    border: none;
+    border-radius: 0px;
+    padding: 5px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+.daypilot_button:hover{
+    background: #ccc; color: blue;
+}
+.calendar_default_main{
+    border: none !important;
+}
+.calendar_default_event_bar{
+    display: none !important;
+}
+.calendar_default_event_inner{
+    border-color: rgb(121, 134, 203) !important;
+    background: none !important;
+}
+.calendar_default_event{
+    font-size: 12px;
+    line-height: 20px;
+}

@@ -259,6 +259,7 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
               name="event_date" // Name for the form field
               control={control}
               rules={{ required: true }} // React Hook Form validation rules
+              defaultValue={dayjs()}
               render={({ field }) => (
                 <DatePicker {...field} showTime />
               )}
