@@ -104,10 +104,10 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
   const getCustomers = async (keyword: string) => {
     try {
         const response = await apiClient.get('/customers?keyword='+keyword); // Replace with your actual API endpoin
-        const data =  response.data?.data.map((item: {_id: string, name: string}) => {
+        const data =  response.data?.data.map((item: {_id: string, name: string, phone_number: string}) => {
           return {
             value: item._id,
-            label: item?.name || '', 
+            label: item?.name + ' - ' + item?.phone_number || '', 
           }
         })
         setCustomers(data);

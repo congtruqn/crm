@@ -137,6 +137,7 @@ const Quotes: React.FC = ()=>{
   };
   const onChange: TableProps<DataType>['onChange'] = (pagination) => {
     setPageSize(pagination.pageSize || 10);
+    setPageSize(pagination.pageSize || 10);
     setCurrent(pagination.current || 1);
     fetchData(pagination.pageSize || 0, pagination.current || 0);
   }
@@ -149,7 +150,7 @@ const Quotes: React.FC = ()=>{
   };
   useEffect(() => {
     fetchData(10,1);
-  }, [current, pageSize]);
+  }, []);
   return (
     <section>
       <h2 className="title">{"Danh sách báo giá"}</h2>
