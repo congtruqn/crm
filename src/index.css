@@ -119,7 +119,7 @@ label {
     text-align: right;
 }
 .panel_body_top {
-    padding: 10px;
+    padding: 15px;
     display: block;
     background: #fff;
     text-align: right;
@@ -273,4 +273,20 @@ label {
     width: 100% !important; /* Extend across the full width of the container */
     border-top: 2px solid red !important; /* The line itself */
     transform: translateY(-50%) !important; /* Adjust for accurate vertical centering */
+}
+.search_form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(187, 187, 187);
+    padding: 0.2rem 0.5rem;
+}
+.search_form input{
+    border: none;
+    outline: none;
+    background-color: inherit;
+    margin-left: 0.5rem;
+    padding: 0.4rem;
+    flex: 1;
+    font-size: 13px;
 }

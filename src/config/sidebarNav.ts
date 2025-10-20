@@ -36,7 +36,7 @@ const sidebarNav = [
     },
     {
       link: "/crm/appointment",
-      section: "Lịch hẹn",
+      section: "Lịch",
       icon: "ic:round-inventory",
       text: "Analytics",
       userTypes: [2,3,4,5,6],

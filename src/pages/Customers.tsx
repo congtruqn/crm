@@ -27,6 +27,7 @@ const Customer: React.FC = ()=>{
   const [openModal, setOpenModal] = useState(false);
   const [openViewCustomer, setOpenViewCustomer] = useState(false);
   const [customerId, setCustomerId] = useState('');
+  const [keyword, setKeyword] = useState('');
   const showDrawer = () => {
     setCustomerId('');
     setOpen(true);
@@ -49,7 +50,7 @@ const Customer: React.FC = ()=>{
  const comfirmDelete = async () => {
     const response = await apiClient.delete('/customer/'+customerId);
     if(response.status == 200){
-      fetchData(pageSize, current);
+      fetchData(pageSize, current, keyword);
       setOpenModal(false);
     }
   };
@@ -120,9 +121,9 @@ const Customer: React.FC = ()=>{
       ),
     },
 ];
-  const fetchData = async (pageSize: number, pageNumber: number) => {
+  const fetchData = async (pageSize: number, pageNumber: number, keyword: string) => {
     try {
-        const response = await apiClient.get('/customers?pageSize='+pageSize+'&pageNumber='+pageNumber); // Replace with your actual API endpoin
+        const response = await apiClient.get('/customers?pageSize='+pageSize+'&pageNumber='+pageNumber+'&keyword='+keyword); // Replace with your actual API endpoin
         const temp = response.data?.data.map((item: Customers, index: number) => {
           return {
             key:  item._id,
@@ -145,25 +146,48 @@ const Customer: React.FC = ()=>{
   const onChange: TableProps<DataType>['onChange'] = (pagination) => {
     setPageSize(pagination.pageSize || 10);
     setCurrent(pagination.current || 1);
-    fetchData(pagination.pageSize || 0, pagination.current || 0);
+    fetchData(pagination.pageSize || 0, pagination.current || 0, keyword);
   }
+  const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value || '')
+    fetchData(pageSize, 1, event.target.value || '')
+  };
   const handleCloseModal = () => setOpen(false);
   const handleFormSubmit = (formData: unknown) => {
     console.log('Form data submitted:', formData);
     // Perform actions with formData, e.g., API call
     handleCloseModal(); // Close modal after successful submission
-    fetchData(pageSize, current);
+    fetchData(pageSize, current, keyword);
   };
   useEffect(() => {
-    fetchData(10,1);
+    fetchData(10,1, '');
   }, []);
   return (
     <section>
       <h2 className="title">{"Danh sách khách hàng"}</h2>
       <div className="panel_body_top">
-        <Button type="primary" onClick={showDrawer}>
-          Thêm khách hàng
-        </Button>
+        <div className="form-group col-sm-6">
+          <div className="search_form">
+            <Icon
+              icon="fluent:search-28-filled"
+              width="14"
+              style={{ fontWeight: "bold" }}
+            />
+            <input
+              type="search"
+              placeholder={"Tìm theo tên hoặc SDT"}
+              name="search"
+              className="search_form_input"
+              onChange={onSearch} 
+            />
+          </div>
+        </div>
+        <div>
+          <Button type="primary" onClick={showDrawer}>
+            Thêm khách hàng
+          </Button>
+        </div>
+
       </div>
       <Table<DataType> columns={columns} dataSource={data} onChange={onChange}
               // onRow={(record) => {
