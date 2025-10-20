@@ -193,7 +193,6 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
               name="next_contact_date" // Name for the form field
               control={control}
               rules={{ required: false }} // React Hook Form validation rules
-              defaultValue={dayjs()}
               render={({ field }) => (
                 <DatePicker {...field} showTime  format="DD/MM/YYYY HH:mm"
                 /> 
