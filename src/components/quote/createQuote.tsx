@@ -92,10 +92,10 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
   const getCustomers = async (keyword: string) => {
     try {
         const response = await apiClient.get('/customers?keyword='+keyword); // Replace with your actual API endpoin
-        const data =  response.data?.data.map((item: {_id: string, name: string}) => {
+        const data =  response.data?.data.map((item: {_id: string, name: string, phone_number: string}) => {
           return {
             value: item._id,
-            label: item?.name || '', 
+            label: item?.name + ' - ' + item?.phone_number || '', 
           }
         })
         setCustomers(data);
@@ -108,7 +108,6 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
         const response = await apiClient.get('/quote/'+id);
         for(const key in response.data){
           if(key === 'items'){
-            console.log(response.data[key]);
             const items = response.data[key].map((item: { product_id: string; quantity: number; unit: string; price: number; total: number, product_more_info: [], description: string}) => ({
               product_id: item.product_id,
               quantity: item.quantity,
