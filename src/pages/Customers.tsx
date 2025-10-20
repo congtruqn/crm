@@ -89,6 +89,10 @@ const Customer: React.FC = ()=>{
       dataIndex: 'phone_number',
     },
     {
+      title: 'Người tạo',
+      dataIndex: 'create_name',
+    },
+    {
       title: 'Đánh giá',
       dataIndex: 'evaluate',
     },
@@ -131,6 +135,7 @@ const Customer: React.FC = ()=>{
             count: ((pageNumber -1) * pageSize) + index + 1,
             name: item.name,
             phone_number: item.phone_number,
+            create_name: item.create_name,
             evaluate: getEvaluate(item.evaluate),
             status: getCustomerStatus(item.status),
             next_contact_date: moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
