@@ -24,7 +24,7 @@ const Quotes: React.FC = ()=>{
   const [current, setCurrent] = useState(1);
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [openViewCustomer, setOpenViewCustomer] = useState(false);
+  const [openViewQuote, setOpenViewQuote] = useState(false);
   const [quoteId, setQuoteId] = useState('');
   const showDrawer = () => {
     setQuoteId('');
@@ -36,10 +36,10 @@ const Quotes: React.FC = ()=>{
   };
   const onViewCustomer = (id: string) => {
     setQuoteId(id);
-    setOpenViewCustomer(true);
+    setOpenViewQuote(true);
   };
   const closeViewCustomer = () => {
-    setOpenViewCustomer(false);
+    setOpenViewQuote(false);
   };
   const showModal = () => {
     setOpenModal(true);
@@ -188,7 +188,7 @@ const Quotes: React.FC = ()=>{
           width={900}
           closable={true}
           onClose={closeViewCustomer}
-          open={openViewCustomer}
+          open={openViewQuote}
         >
           <ViewQuote quoteId={quoteId}/>
       </Drawer>

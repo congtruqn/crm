@@ -5,7 +5,7 @@ interface MyComponentProps {
   quoteId: string,
 }
 
-const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)=>{
+const ViewQuote: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)=>{
   const [htmlContent, setHtmlContent] = useState('');
   const value:User = useMyStore((state ) => state.value);
   const contentRef = useRef(null);
@@ -25,7 +25,7 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)
     };
 
     fetchHtml();
-  }, []);
+  }, [quoteId]);
   const generatePdf = async () => {
     //Allow for borders.
     const leftPosition = (window.screen.width / 2) - ((1000 / 2) + 10);
@@ -39,11 +39,6 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)
       winPrint.print();
       winPrint.close(); 
     }
-
-    // const originalContents = document.body.innerHTML;
-    // document.body.innerHTML = htmlContent; // Replace body content with printable content
-    // window.open().print(); // Trigger print dialog
-    // document.body.innerHTML = originalContents; 
   };
   return (
     <>
@@ -58,4 +53,4 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ quoteId }: MyComponentProps)
   );
 }
 
-export default ViewCustomer;
+export default ViewQuote;
