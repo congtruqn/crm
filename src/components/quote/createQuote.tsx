@@ -114,7 +114,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
               unit: item.unit,
               price: item.price,
               total: item.total,
-              description: item.description,
+              description: item.description.replace(/<br>/g, '\n'),
             }));
             setValue(key, items);
             setValue('customer_id', response.data['customerId']);
