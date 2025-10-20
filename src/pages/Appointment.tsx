@@ -17,27 +17,35 @@ const Appointment: React.FC = ()=>{
   const endOfWeek = moment().endOf('isoWeek');
   const startOfWeekISO = startOfWeek.toISOString();
   const endOfWeekISO = endOfWeek.toISOString();
+  const [fromDate, setFromDate] = useState(startOfWeekISO);
+  const [toDate, setToDate] = useState(endOfWeekISO);
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const handleOk = () => {
+    setFrom('')
+    setTo('')
+    fetchData(calendar, fromDate, toDate)
     setIsModalOpen(false);
     if (!calendar || calendar?.disposed()) {
       return;
     }
-    //console.log(from,to)
-    // Perform actions when OK is clicked
   };
   const handleCancel = () => {
+    setFrom('')
+    setTo('')
     setIsModalOpen(false);
-    // Perform actions when Cancel is clicked or modal is closed
   };
   const previous = () => {
     setStartDate(startDate.addDays(-7));
+    setFromDate(startDate.addDays(-7).toString())
+    setToDate(startDate.toString())
   };
   const next = () => {
     setStartDate(startDate.addDays(+7));
+    setFromDate(startDate.addDays(+7).toString())
+    setToDate(startDate.addDays(14).toString())
   };
 
 
@@ -50,7 +58,7 @@ const Appointment: React.FC = ()=>{
       startDate: "2026-10-01",
       locale: "vi-vn",
       timeRangeSelectedHandling: "Enabled",
-      cellHeight: 40,
+      cellHeight: 35,
       headerHeight: 40,
       height: 600,
       businessBeginsHour: 8,
@@ -90,8 +98,8 @@ const Appointment: React.FC = ()=>{
   };
 
   useEffect(() => {
-    fetchData(calendar, startOfWeekISO,endOfWeekISO)
-}, [calendar]);
+    fetchData(calendar, fromDate, toDate)
+}, [calendar, fromDate]);
   return (
     <section>
       <h2 className="title">{"Lịch"}</h2>
@@ -121,7 +129,7 @@ const Appointment: React.FC = ()=>{
           onClose={handleCancel}
           open={isModalOpen}
         >
-          <CreateEvent id={''} onCancel={handleOk} onSubmitSuccess={handleCancel}/>
+          <CreateEvent id={''} onCancel={handleCancel} onSubmitSuccess={handleOk}/>
       </Drawer>
     </section>
   );

@@ -25,7 +25,6 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
   const [employees, setEmployees] = useState([]);
   const [customers, setCustomers] = useState([]);
   const onSubmit = async (data : unknown) => {
-
     if(id){
       if(typeof data == 'object'){
         const rep = await apiClient.put('event/'+id, { from, to, ...data });
