@@ -52,7 +52,7 @@ const Appointment: React.FC = ()=>{
       height: 600,
       businessBeginsHour: 8,
       businessEndsHour: 18,
-      durationBarVisible: true,
+      
       onTimeRangeSelected: async (args) => {
           const scheduler = args.control;
           scheduler.clearSelection(); // Clear the selection after user interaction
@@ -98,7 +98,12 @@ const Appointment: React.FC = ()=>{
             startDate={startDate}
             controlRef={setCalendar}
             onEventClick={onEventClick}
-            
+            onBeforeCellRender={(args) => {
+              const now = DayPilot.Date.now();
+              if (args.cell.start <= now && now < args.cell.end) {
+                args.cell.properties.cssClass = "current_time";
+              }
+            }}
         />
       </div>
       <button onClick={previous}>Previous</button>

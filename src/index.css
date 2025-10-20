@@ -265,3 +265,12 @@ label {
     padding-top: 10px;
     overflow: hidden;
 }
+.current_time .calendar_default_cell_inner::before {
+    content: '' !important; /* Required for pseudo-elements */
+    position: absolute !important;
+    top: 50% !important; /* Position vertically in the middle */
+    left: 0 !important;
+    width: 100% !important; /* Extend across the full width of the container */
+    border-top: 2px solid red !important; /* The line itself */
+    transform: translateY(-50%) !important; /* Adjust for accurate vertical centering */
+}
