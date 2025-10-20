@@ -274,6 +274,9 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
                           const selectedProduct = products.find(p => p.value === value);
                           setValue(`items.${index}.price`, selectedProduct?.price || 0);
                           setValue(`items.${index}.description`, selectedProduct?.description || "");
+                          const price = watch(`items.${index}.price`);
+                          const quantity = watch(`items.${index}.quantity`);
+                          setValue(`items.${index}.total`, quantity * price);
                         }}
                         filterOption={(input, option) =>
                             (removeUnicode(option?.label ?? '')).toLowerCase().includes(removeUnicode(input.toLowerCase()))

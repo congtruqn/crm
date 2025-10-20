@@ -187,7 +187,6 @@ const Customer: React.FC = ()=>{
             Thêm khách hàng
           </Button>
         </div>
-
       </div>
       <Table<DataType> columns={columns} dataSource={data} onChange={onChange}
               // onRow={(record) => {
