@@ -11,7 +11,7 @@ import { useDateStore } from "../store/dateStore";
 const Appointment: React.FC = ()=>{ 
   const { setFrom, setTo } = useDateStore();
   const [calendar, setCalendar] = useState<DayPilot.Calendar>();
-  const [startDate, setStartDate] = useState<DayPilot.Date>(DayPilot.Date.today());
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const startOfWeek = moment().startOf('isoWeek');
   const endOfWeek = moment().endOf('isoWeek');
@@ -19,6 +19,7 @@ const Appointment: React.FC = ()=>{
   const endOfWeekISO = endOfWeek.toISOString();
   const [fromDate, setFromDate] = useState(startOfWeekISO);
   const [toDate, setToDate] = useState(endOfWeekISO);
+  const [startDate, setStartDate] = useState(startOfWeek.toISOString());
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -38,14 +39,14 @@ const Appointment: React.FC = ()=>{
     setIsModalOpen(false);
   };
   const previous = () => {
-    setStartDate(startDate.addDays(-7));
-    setFromDate(startDate.addDays(-7).toString())
-    setToDate(startDate.toString())
+    setStartDate(moment(startDate).subtract(7,'days').toISOString());
+    setFromDate(moment(startDate).subtract(7,'days').toISOString())
+    setToDate(startDate)
   };
   const next = () => {
-    setStartDate(startDate.addDays(+7));
-    setFromDate(startDate.addDays(+7).toString())
-    setToDate(startDate.addDays(14).toString())
+    setStartDate(moment(startDate).add(7,'days').toISOString());
+    setFromDate(moment(startDate).add(7,'days').toISOString())
+    setToDate(moment(startDate).add(14,'days').toISOString())
   };
 
 
@@ -55,7 +56,7 @@ const Appointment: React.FC = ()=>{
   };
   const initialConfig: DayPilot.CalendarConfig = {
       viewType: "Week",
-      startDate: "2026-10-01",
+      startDate: startDate,
       locale: "vi-vn",
       timeRangeSelectedHandling: "Enabled",
       cellHeight: 35,
@@ -63,7 +64,6 @@ const Appointment: React.FC = ()=>{
       height: 600,
       businessBeginsHour: 8,
       businessEndsHour: 18,
-      
       onTimeRangeSelected: async (args) => {
           const scheduler = args.control;
           scheduler.clearSelection(); // Clear the selection after user interaction
@@ -99,7 +99,7 @@ const Appointment: React.FC = ()=>{
 
   useEffect(() => {
     fetchData(calendar, fromDate, toDate)
-}, [calendar, fromDate]);
+}, [calendar, startDate]);
   return (
     <section>
       <h2 className="title">{"Lịch"}</h2>
