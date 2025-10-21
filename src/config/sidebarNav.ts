@@ -14,6 +14,20 @@ const sidebarNav = [
       userTypes: [2],
     },
     {
+      link: "/crm/customer-status",
+      section: "Trạng thái khách hàng",
+      icon: "icon-park-outline:ad-product",
+      text: "CustomerStatus",
+      userTypes: [2],
+    },
+    {
+      link: "/crm/customer-evaluations",
+      section: "Đánh giá khách hàng",
+      icon: "icon-park-outline:ad-product",
+      text: "CustomerEvaluations",
+      userTypes: [2],
+    },
+    {
       link: "/crm/customers",
       section: "Khách hàng",
       icon: "ph:users-bold",

@@ -4,7 +4,7 @@ import type { TableColumnsType, TableProps } from 'antd';
 import apiClient from "../api/apiClient";
 import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
-import CreateEventType from "../components/event/createEventType";
+import CreateCustomerStatus from "../components/customer/createCustomerStatus";
 
 interface DataType {
     key: React.Key;
@@ -13,7 +13,7 @@ interface DataType {
 }
 
 
-const EventType: React.FC = ()=>{  
+const CustomerStatus: React.FC = ()=>{  
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -34,7 +34,7 @@ const EventType: React.FC = ()=>{
   };
 
  const comfirmDelete = async () => {
-    const response = await apiClient.delete('/event-type/'+customerId);
+    const response = await apiClient.delete('/customer-status/'+customerId);
     if(response.status == 200){
       fetchData(pageSize, current);
       setOpenModal(false);
@@ -58,7 +58,7 @@ const EventType: React.FC = ()=>{
       width: '25px'
     },
     {
-      title: 'Tên loại công việc',
+      title: 'Tên trạng thái',
       dataIndex: 'name',
     },
     {
@@ -92,7 +92,7 @@ const EventType: React.FC = ()=>{
 ];
   const fetchData = async (pageSize: number, pageNumber: number) => {
     try {
-        const response = await apiClient.get('/event-types?pageSize='+pageSize+'&pageNumber='+pageNumber); // Replace with your actual API endpoin
+        const response = await apiClient.get('/customer-status?pageSize='+pageSize+'&pageNumber='+pageNumber); // Replace with your actual API endpoin
         const temp = response.data?.data.map((item: Customers, index: number) => {
           return {
             key:  item._id,
@@ -126,10 +126,10 @@ const EventType: React.FC = ()=>{
   }, [current, pageSize]);
   return (
     <section>
-      <h2 className="title">{"Danh loại công việc"}</h2>
+      <h2 className="title">{"Danh sách loại trạng thái"}</h2>
       <div className="panel_body_top">
         <Button type="primary" onClick={showDrawer}>
-          Thêm loại công việc
+          Thêm trạng thái
         </Button>
       </div>
       <Table<DataType> columns={columns} dataSource={data} onChange={onChange}  pagination={{
@@ -140,13 +140,13 @@ const EventType: React.FC = ()=>{
       }}/>
       <Drawer
       
-          title="Thêm loại công việc"
+          title="Thêm trạng thái"
           width={900}
           closable={true}
           onClose={onClose}
           open={open}
         >
-          <CreateEventType id={customerId} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
+          <CreateCustomerStatus id={customerId} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
       </Drawer>
       <Modal
         title=""
@@ -158,11 +158,11 @@ const EventType: React.FC = ()=>{
       >
         
         <h3 className="comfirm_title"><Icon icon={'material-symbols:warning'} /> <label>Xác nhận</label></h3>
-        <p>Bạn chắc chắn muốn xóa loại công việc này!</p>
+        <p>Bạn chắc chắn muốn xóa trạng thái này!</p>
       </Modal>
     </section>
     
   );
 }
 
-export default EventType;
+export default CustomerStatus;

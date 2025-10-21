@@ -18,6 +18,8 @@ import { useMyStore } from "./store/userStore";
 import apiClient from "./api/apiClient";
 import Notifications from "./pages/Notifications";
 import Customers from "./pages/Customers";
+import CustomerStatus from "./pages/CustomerStatus";
+import CustomerEvaluation from "./pages/CustomerEvaluation";
 
 function App() {
   const user:User = useMyStore((state ) => state.value);
@@ -71,6 +73,8 @@ function App() {
               <Route path="/crm/quote" element={<Quotes />} />
               <Route path="/crm/appointment" element={<Appointment />} />
               <Route path="/crm/notifications" element={<Notifications />} />
+              <Route path="/crm/customer-status" element={<CustomerStatus />} />
+              <Route path="/crm/customer-evaluations" element={<CustomerEvaluation />} />
             </Route>
           </Routes>
         </Suspense>
