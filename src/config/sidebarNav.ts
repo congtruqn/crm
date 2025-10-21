@@ -1,30 +1,9 @@
 const sidebarNav = [
     {
       link: "/crm/",
-      section: "dashboard",
+      section: "Tổng quan",
       icon: "lucide:layout-dashboard", //width:"20"
       text: "Dashboard",
-      userTypes: [2],
-    },
-    {
-      link: "/crm/event-types",
-      section: "Loại công việc",
-      icon: "icon-park-outline:ad-product",
-      text: "Products",
-      userTypes: [2],
-    },
-    {
-      link: "/crm/customer-status",
-      section: "Trạng thái khách hàng",
-      icon: "icon-park-outline:ad-product",
-      text: "CustomerStatus",
-      userTypes: [2],
-    },
-    {
-      link: "/crm/customer-evaluations",
-      section: "Đánh giá khách hàng",
-      icon: "icon-park-outline:ad-product",
-      text: "CustomerEvaluations",
       userTypes: [2],
     },
     {
