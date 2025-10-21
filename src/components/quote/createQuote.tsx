@@ -89,6 +89,22 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
   const onSearch = (data : string) => {
     getProducts(data)
   };
+  const getProducts = async (keyword: string) => {
+    try {
+        const response = await apiClient.get('/products?keyword='+keyword); // Replace with your actual API endpoin
+        const data =  response.data?.data.map((item: {_id: string, detail: { name: string, description: string }[], price: number, product_more_info: { info_value: string, info_name: string }[]}) => {
+          return {
+            value: item._id,
+            label: item?.detail[0]?.name || '',
+            price: item.price || 0,
+            description: item.product_more_info?.map((it: { info_name: string, info_value: string })=> it.info_name + ': ' + it.info_value).join('\n') || '',
+          }
+        })
+        setProducts(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const getCustomers = async (keyword: string) => {
     try {
         const response = await apiClient.get('/customers?keyword='+keyword); // Replace with your actual API endpoin
@@ -155,22 +171,6 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
     reset();
     onCancel(true); // Pass form data to parent
   };
-  const getProducts = async (keyword: string) => {
-    try {
-        const response = await apiClient.get('/products?keyword='+keyword); // Replace with your actual API endpoin
-        const data =  response.data?.data.map((item: {_id: string, detail: { name: string, description: string }[], price: number, product_more_info: { info_value: string, info_name: string }[]}) => {
-          return {
-            value: item._id,
-            label: item?.detail[0]?.name || '',
-            price: item.price || 0,
-            description: item.product_more_info?.map((it: { info_name: string, info_value: string })=> it.info_name + ': ' + it.info_value).join('\n') || '',
-          }
-        })
-        setProducts(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   useEffect(() => {
     getProducts('');
     getCustomers('');
@@ -182,7 +182,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
     else{
       reset();
     }
-  }, [quoteId]);
+  }, [quoteId, products]);
   useEffect(() => {
     setValue('amount', grandTotal);
     setValue('text_amount', currencyFormatter(grandTotal));
