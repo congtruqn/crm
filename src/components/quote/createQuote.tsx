@@ -182,7 +182,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
     else{
       reset();
     }
-  }, [quoteId, products]);
+  }, [quoteId]);
   useEffect(() => {
     setValue('amount', grandTotal);
     setValue('text_amount', currencyFormatter(grandTotal));
