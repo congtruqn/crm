@@ -129,7 +129,7 @@ const Quotes: React.FC = ()=>{
             count: ((pageNumber -1) * pageSize) + index + 1,
             customer: item.customer,
             user: item.user,
-            amount: item.amount,
+            amount: item.amount?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + ' Đ',
             create_date: moment(item.create_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
           }
         })

@@ -67,6 +67,7 @@ function Sidebar() {
       <div className={[classes.sidebar__menu, classes.logout].join("")}>
         <Link
           to="/user/logout"
+          target="_seft"
           className={classes.sidebar__menu__item}
           onClick={logoutHandler}
         >
