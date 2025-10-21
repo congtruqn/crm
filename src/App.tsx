@@ -1,9 +1,8 @@
-import { lazy, Suspense, useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoadingSpinner from "./components/loadingSpinner/LoadingSpinner";
 import "./scss/App.scss";
 import MainLayout from "./layout/MainLayout";
-const Customers = lazy(() => import("./pages/Customers"));
 import Quotes from "./pages/Quotes";
 import Appointment from "./pages/Appointment";
 import { ToastContainer } from 'react-toastify';
@@ -12,13 +11,13 @@ import Works from "./pages/Works";
 import EventType from "./pages/EventType";
 import { LoadingProvider } from "./store/LoadingContext";
 import GlobalLoader from "./components/loading/GlobalLoader";
-//import { getToken } from 'firebase/messaging';
 import { onMessageListener, requestForToken } from "./config/firebase-config"
 import { useNotiStore } from "./store/notiStore";
 import type { User } from "./interfaces/user";
 import { useMyStore } from "./store/userStore";
 import apiClient from "./api/apiClient";
 import Notifications from "./pages/Notifications";
+import Customers from "./pages/Customers";
 
 function App() {
   const user:User = useMyStore((state ) => state.value);
