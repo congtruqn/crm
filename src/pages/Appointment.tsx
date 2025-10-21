@@ -20,6 +20,10 @@ const Appointment: React.FC = ()=>{
   const [fromDate, setFromDate] = useState(startOfWeekISO);
   const [toDate, setToDate] = useState(endOfWeekISO);
   const [startDate, setStartDate] = useState(startOfWeek.toISOString());
+  let currentHour = moment().hour();
+  if(currentHour > 15){
+    currentHour = 15
+  }
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -61,9 +65,9 @@ const Appointment: React.FC = ()=>{
       timeRangeSelectedHandling: "Enabled",
       cellHeight: 35,
       headerHeight: 40,
-      height: 600,
-      businessBeginsHour: 8,
-      businessEndsHour: 18,
+      height: 800,
+      businessBeginsHour: currentHour - 1,
+      businessEndsHour: 24,
       onTimeRangeSelected: async (args) => {
           const scheduler = args.control;
           scheduler.clearSelection(); // Clear the selection after user interaction
@@ -72,8 +76,7 @@ const Appointment: React.FC = ()=>{
           setTo(args.end?.toString())
       },
   };
-  const [config, setConfig ] = useState(initialConfig);
-  console.log(setConfig);
+
 
   const fetchData = async (calendar: DayPilot.Calendar | undefined, fromDate: string, toDate: string) => {
     try {
@@ -97,6 +100,7 @@ const Appointment: React.FC = ()=>{
     }
   };
 
+  console.log(currentHour)
   useEffect(() => {
     fetchData(calendar, fromDate, toDate)
 }, [calendar, startDate]);
@@ -109,7 +113,7 @@ const Appointment: React.FC = ()=>{
       </div>
       <div className="container_p">
         <DayPilotCalendar
-            {...config}
+            {...initialConfig}
             startDate={startDate}
             controlRef={setCalendar}
             onEventClick={onEventClick}
