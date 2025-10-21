@@ -124,8 +124,8 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
         const response = await apiClient.get('/quote/'+id);
         for(const key in response.data){
           if(key === 'items'){
-            const items = response.data[key].map((item: { product_id: string; quantity: number; unit: string; price: number; total: number, product_more_info: [], description: string}) => ({
-              product_id: item.product_id,
+            const items = response.data[key].map((item: { product_id: string; product: string, quantity: number; unit: string; price: number; total: number, product_more_info: [], description: string}) => ({
+              product_id: { value: item.product_id, label: item.product },
               quantity: item.quantity,
               unit: item.unit,
               price: item.price,
