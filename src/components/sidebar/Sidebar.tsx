@@ -40,7 +40,7 @@ function Sidebar() {
       }`}
     >
       <div className="sidebar__logo">
-        <img src={import.meta.env.VITE_BASE_URL+'/static'+value.website_logo} alt="digikala" />
+        <img src={import.meta.env.VITE_BASE_URL+'/static/'+value.website_logo} alt="digikala" />
       </div>
       <div className={classes.sidebar__menu}>
         {sidebarNav.map((nav, index) => (
