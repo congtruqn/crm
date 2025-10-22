@@ -88,8 +88,8 @@ const Customer: React.FC = ()=>{
       dataIndex: 'phone_number',
     },
     {
-      title: 'Người tạo',
-      dataIndex: 'create_name',
+      title: 'Nhân viên quản lý',
+      dataIndex: 'user',
     },
     {
       title: 'Đánh giá',
@@ -134,11 +134,10 @@ const Customer: React.FC = ()=>{
             count: ((pageNumber -1) * pageSize) + index + 1,
             name: item.name,
             phone_number: item.phone_number,
-            create_name: item.create_name,
+            user: item.user,
             customer_evaluation: item.customer_evaluation,
             customer_status: item.customer_status,
             next_contact_date: moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
-
           }
         })
         setData(temp);

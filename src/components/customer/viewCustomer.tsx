@@ -63,6 +63,8 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
     customer_status: "",
     customer_evaluation_id: "",
     customer_status_id: "",
+    user_id: '',
+    user: "",
   });
   const onChange: TableProps<DataType>['onChange'] = (pagination) => {
       setPageSize(pagination.pageSize || 10);

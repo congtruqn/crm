@@ -10,6 +10,8 @@ export interface Customers {
     demand: string
     customer_id: number
     create_user: string
+    user_id: string
+    user: string
     create_name: string
     create_date: string
     customer_evaluation: string,
