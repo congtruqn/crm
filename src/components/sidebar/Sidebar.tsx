@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useWindowSize } from "usehooks-ts";
-import logo from "../../assets/images/digikala.svg"
 import sidebarNav from "../../config/sidebarNav";
 import SidebarContext from "../../store/sidebarContext";
 import { Icon } from "@iconify/react";
@@ -40,8 +39,8 @@ function Sidebar() {
         !sidebarCtx.isOpen && classes.sidebar_close
       }`}
     >
-      <div className={classes.sidebar__logo}>
-        <img src={logo} alt="digikala" />
+      <div className="sidebar__logo">
+        <img src={import.meta.env.VITE_BASE_URL+'/static'+value.website_logo} alt="digikala" />
       </div>
       <div className={classes.sidebar__menu}>
         {sidebarNav.map((nav, index) => (

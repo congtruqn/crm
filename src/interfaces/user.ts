@@ -10,7 +10,7 @@ export interface User {
     name: string
     type: number
     status: number
-    __v: number
+    website_logo: string
     iat: number
     exp: number
   }
