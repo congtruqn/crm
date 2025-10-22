@@ -3,7 +3,6 @@ import { Button, Drawer, Modal, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 import apiClient from "../api/apiClient";
 import CreateCustomer from "../components/customer/createCustomer";
-import { getCustomerStatus, getEvaluate } from "../constants/masterData";
 import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
 import moment from 'moment-timezone';
@@ -94,11 +93,11 @@ const Customer: React.FC = ()=>{
     },
     {
       title: 'Đánh giá',
-      dataIndex: 'evaluate',
+      dataIndex: 'customer_evaluation',
     },
     {
       title: 'Trạng thái',
-      dataIndex: 'status',
+      dataIndex: 'customer_status',
     },
     {
       title: 'Ngày liên hệ tiếp theo',
@@ -136,8 +135,8 @@ const Customer: React.FC = ()=>{
             name: item.name,
             phone_number: item.phone_number,
             create_name: item.create_name,
-            evaluate: getEvaluate(item.evaluate),
-            status: getCustomerStatus(item.status),
+            customer_evaluation: item.customer_evaluation,
+            customer_status: item.customer_status,
             next_contact_date: moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
 
           }

@@ -11,7 +11,7 @@ import type { User } from "../../../interfaces/user";
 const items: MenuProps['items'] = [
   {
     label: (
-      <a href="/crm/customer-status"  rel="noopener noreferrer">
+      <a href="/crm/customer-status">
         Trạng thái khách hàng
       </a>
     ),
@@ -19,7 +19,7 @@ const items: MenuProps['items'] = [
   },
   {
     label: (
-      <a href="/crm/customer-evaluations" rel="noopener noreferrer">
+      <a href="/crm/customer-evaluations">
         Đánh giá khách hàng
       </a>
     ),
@@ -27,7 +27,7 @@ const items: MenuProps['items'] = [
   },
   {
     label: (
-      <a href="/crm/event-types" rel="noopener noreferrer">
+      <a href="/crm/event-types">
         Loại công việc
       </a>
     ),

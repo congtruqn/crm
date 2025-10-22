@@ -1,8 +1,7 @@
 import { DatePicker, Select } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import apiClient from "../../api/apiClient";
-import { customerStatus, evaluates } from "../../constants/masterData";
 import type { Customers } from "../../interfaces/customer";
 import dayjs from "dayjs";
 import weekday from 'dayjs/plugin/weekday'; // Import the plugin
@@ -18,6 +17,8 @@ interface MyComponentProps {
 }
 const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSuccess, onCancel }: MyComponentProps)=>{  
   const { reset, control, register, handleSubmit, setValue,  formState: { errors } } = useForm();
+  const [ customerStatus, setCustomerStatus ] = useState([]);
+  const [ customerEvaluation, setCustomerEvaluation ] = useState([]);
   const onSubmit = async (data : unknown) => {
     if(customerId){
       const rep = await apiClient.put('customer/'+customerId, data);
@@ -51,11 +52,39 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
           setValue("company", temp.company);
           setValue("address", temp.address);
           setValue("taxcode", temp.taxcode);
-          setValue("status", temp.status);
-          setValue("evaluate", temp.evaluate);
+          setValue("customer_status", temp.customer_status_id);
+          setValue("customer_evaluation", temp.customer_evaluation_id);
           //setValue("next_contact_date", moment(temp.next_contact_date));
         }
         return temp;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const getCustomerStatus = async () => {
+    try {
+        const response = await apiClient.get('/customer-status'); // Replace with your actual API endpoin
+        const data =  response.data?.data.map((item: {_id: string, name: string}) => {
+          return {
+            value: item._id,
+            label: item?.name || '', 
+          }
+        })
+        setCustomerStatus(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const getCustomerEvaluations = async () => {
+    try {
+        const response = await apiClient.get('/customer-evaluations'); // Replace with your actual API endpoin
+        const data =  response.data?.data.map((item: {_id: string, name: string}) => {
+          return {
+            value: item._id,
+            label: item?.name || '', 
+          }
+        })
+        setCustomerEvaluation(data);
     } catch (err) {
       console.log(err);
     }
@@ -69,6 +98,10 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customerId, onSubmitSuccess]);
+  useEffect(() => {
+    getCustomerStatus();
+    getCustomerEvaluations();
+  }, []);
   return (
     
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -146,14 +179,14 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
           </label>
           <div className="col-sm-12">
           <Controller
-              name="evaluate" // Name for the form field
+              name="customer_evaluation" // Name for the form field
               control={control}
               rules={{ required: true }} // React Hook Form validation rules
               render={({ field }) => (
                 <Select
                   {...field} // Binds value and onChange from React Hook Form
                   placeholder="Chọn đánh giá"
-                  options={evaluates}
+                  options={customerEvaluation}
                 >
                 </Select>
               )}
@@ -168,7 +201,7 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
           </label>
           <div className="col-sm-12">
           <Controller
-              name="status" // Name for the form field
+              name="customer_status" // Name for the form field
               control={control}
               rules={{ required: true }} // React Hook Form validation rules
               render={({ field }) => (

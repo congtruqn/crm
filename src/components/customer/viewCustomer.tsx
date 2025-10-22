@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import apiClient from "../../api/apiClient";
 import type { Customers } from "../../interfaces/customer";
 import { Table, type TableColumnsType, type TableProps } from "antd";
-import { getCustomerStatus, getEvaluate } from "../../constants/masterData";
 import type { Events } from "../../interfaces/event";
 import moment from "moment";
 interface MyComponentProps {
@@ -53,15 +52,17 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
     email: "",
     company: "",
     address: "",
-    status: 0,
     taxcode: "",
     next_contact_date: "",
     demand: "",
     customer_id: 0,
-    evaluate: 0,
     create_user: "",
     create_name: "",
-    create_date: ""
+    create_date: "",
+    customer_evaluation: "",
+    customer_status: "",
+    customer_evaluation_id: "",
+    customer_status_id: "",
   });
   const onChange: TableProps<DataType>['onChange'] = (pagination) => {
       setPageSize(pagination.pageSize || 10);
@@ -155,13 +156,13 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
 
         <div className="form-group col-sm-6">
           <label className="col-sm-12 control-label">
-            Đánh giá: <strong>{getEvaluate(data.evaluate)}</strong>
+            Đánh giá: <strong>{data.customer_evaluation}</strong>
           </label>
         </div>
 
         <div className="form-group col-sm-6">
           <label className="col-sm-12 control-label">
-            Trạng thái: <strong>{getCustomerStatus(data.status)}</strong>
+            Trạng thái: <strong>{data.customer_status}</strong>
           </label>
         </div>
 
