@@ -59,7 +59,7 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
         const temp = response.data;
         if(temp){
           setValue("event_type_id", temp.event_type?._id);
-          setValue("customer_id", temp.customer?._id);
+          setValue("customer_id", {value: temp.customer?._id ,label: temp.customer?.name + ' - ' + temp.customer?.phone_number});
           setValue("note", temp.note);
           setValue("user_id", temp.user?._id);
           setValue("phone_number", temp.phone_number);
