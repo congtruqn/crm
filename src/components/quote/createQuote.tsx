@@ -133,7 +133,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
               description: item.description.replace(/<br>/g, '\n'),
             }));
             setValue(key, items);
-            setValue('customer_id',{ value: response.data['customerId'], label: response.data?.customer?.name });
+            setValue('customer_id',{ value: response.data['customerId'], label: response.data?.customer?.name + ' - ' + response.data?.customer?.phone_number || '' });
             setValue('amount', response.data['amount']);
             setValue('text_amount', response.data['text_amount']);
           }
