@@ -77,7 +77,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
     defaultValues: {
       email: '',
       create_date: dayjs(),
-      customer_id: '',
+      customer_id: { value: '', label: '' },
       amount: 0,
       text_amount: '',
       items: [{ name: '', quantity: 0, product_id: '', unit:'', price: 0, total: 0, description: ''  }] // Initial item
@@ -133,7 +133,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
               description: item.description.replace(/<br>/g, '\n'),
             }));
             setValue(key, items);
-            setValue('customer_id', response.data['customerId']);
+            setValue('customer_id',{ value: response.data['customerId'], label: response.data?.customer?.name });
             setValue('amount', response.data['amount']);
             setValue('text_amount', response.data['text_amount']);
           }
