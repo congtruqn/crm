@@ -15,4 +15,21 @@ export const removeUnicode =  function (str: string) {
     str = str.replace(/-+-/g, ''); //thay thế 2- thành 1-
     str = str.replace(/^\-+|\-+$/g, '');
     return str;
-};
+}; 
+
+export const convertUnknownToStringArray = function(value: unknown): string[] | [] {
+  if (Array.isArray(value)) {
+      const stringArray: string[] = [];
+      for (const item of value) {
+          if (typeof item === 'string') {
+              stringArray.push(item);
+          } else {
+              // Handle cases where an element is not a string, e.g., skip or throw an error
+              console.warn(`Non-string element found in array: ${item}`);
+              return []; // Or throw new Error('Array contains non-string elements');
+          }
+      }
+      return stringArray;
+  }
+  return []; // Or throw new Error('Value is not an array');
+}

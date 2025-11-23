@@ -7,6 +7,8 @@ import type { Customers } from "../interfaces/customer";
 import { Icon } from "@iconify/react";
 import moment from 'moment-timezone';
 import ViewCustomer from "../components/customer/viewCustomer";
+import FilterCustomer from "../components/customer/filterCustomer";
+import { convertUnknownToStringArray } from "../utils";
 
 interface DataType {
     key: React.Key;
@@ -16,13 +18,14 @@ interface DataType {
     evaluate: string;
 }
 
-
 const Customer: React.FC = ()=>{  
   const [data, setData] = useState([]);
+  const [users, setUsers] = useState<string[]>([]);
   const [total, setTotal] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [current, setCurrent] = useState(1);
   const [open, setOpen] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openViewCustomer, setOpenViewCustomer] = useState(false);
   const [customerId, setCustomerId] = useState('');
@@ -32,6 +35,12 @@ const Customer: React.FC = ()=>{
     setOpen(true);
   };
 
+  const showFilter = () => {
+    setOpenFilter(true);
+  };
+  const closeFilter = () => {
+    setOpenFilter(false);
+  };
   const onClose = () => {
     setOpen(false);
   };
@@ -49,7 +58,7 @@ const Customer: React.FC = ()=>{
  const comfirmDelete = async () => {
     const response = await apiClient.delete('/customer/'+customerId);
     if(response.status == 200){
-      fetchData(pageSize, current, keyword);
+      fetchData(pageSize, current, keyword, users);
       setOpenModal(false);
     }
   };
@@ -124,9 +133,10 @@ const Customer: React.FC = ()=>{
       ),
     },
 ];
-  const fetchData = async (pageSize: number, pageNumber: number, keyword: string) => {
+  const fetchData = async (pageSize: number, pageNumber: number, keyword: string, users: string[]) => {
     try {
-        const response = await apiClient.get('/customers?pageSize='+pageSize+'&pageNumber='+pageNumber+'&keyword='+keyword); // Replace with your actual API endpoin
+        const userString: string = users.map(id => `users=${encodeURIComponent(id)}`).join('&');
+        const response = await apiClient.get('/customers?pageSize='+pageSize+'&pageNumber='+pageNumber+'&keyword='+keyword+'&'+userString); // Replace with your actual API endpoin
         const temp = response.data?.data.map((item: Customers, index: number) => {
           return {
             key:  item._id,
@@ -149,22 +159,35 @@ const Customer: React.FC = ()=>{
   const onChange: TableProps<DataType>['onChange'] = (pagination) => {
     setPageSize(pagination.pageSize || 10);
     setCurrent(pagination.current || 1);
-    fetchData(pagination.pageSize || 0, pagination.current || 0, keyword);
+    fetchData(pagination.pageSize || 0, pagination.current || 0, keyword, users);
   }
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value || '')
-    fetchData(pageSize, 1, event.target.value || '')
   };
   const handleCloseModal = () => setOpen(false);
   const handleFormSubmit = (formData: unknown) => {
     console.log('Form data submitted:', formData);
-    // Perform actions with formData, e.g., API call
     handleCloseModal(); // Close modal after successful submission
-    fetchData(pageSize, current, keyword);
+    fetchData(pageSize, current, keyword, users);
+  };
+  const handleFilterSubmit = (formData: unknown) => {
+    const myObject = formData as { users: string[] };
+    //setUsers(convertUnknownToStringArray(myObject?.users || null));
+    //console.log('Form data submitted:', users);
+    if(myObject?.users){
+      setUsers(convertUnknownToStringArray(myObject?.users));
+      //fetchData(pageSize, current, keyword, users);
+    } else {
+      setUsers([]);
+      //fetchData(pageSize, current, keyword, []);
+    }
+    
+    closeFilter(); // Close modal after successful submission
+    
   };
   useEffect(() => {
-    fetchData(10,1, '');
-  }, []);
+    fetchData(10,1, keyword, users);
+  }, [users, keyword]);
   return (
     <section>
       <h2 className="title">{"Danh sách khách hàng"}</h2>
@@ -184,7 +207,13 @@ const Customer: React.FC = ()=>{
               onChange={onSearch} 
             />
           </div>
+               
         </div>
+        <div className="form-group col-sm-2">
+            <Button type="primary" onClick={showFilter}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd" clip-rule="evenodd"><path d="M19.5 4h-15l6 8.5V20h3v-7.5z"/><path stroke="currentColor" stroke-linecap="square" stroke-width="2" d="M19.5 4h-15l6 8.5V20h3v-7.5z"/></g></svg>
+            </Button>
+            </div>
         <div>
           <Button type="primary" onClick={showDrawer}>
             Thêm khách hàng
@@ -224,6 +253,15 @@ const Customer: React.FC = ()=>{
           open={openViewCustomer}
         >
           <ViewCustomer customerId={customerId}/>
+      </Drawer>
+      <Drawer
+          title="Lọc khách hàng"
+          width={300}
+          closable={true}
+          onClose={closeFilter}
+          open={openFilter}
+        >
+          <FilterCustomer onSubmitSuccess={handleFilterSubmit}/>
       </Drawer>
       <Modal
         title=""
