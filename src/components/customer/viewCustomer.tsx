@@ -37,6 +37,10 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
       dataIndex: 'user',
     },
     {
+      title: 'Ghi chú',
+      dataIndex: 'note',
+    },
+    {
       title: 'Trạng thái',
       dataIndex: 'processed',
     },
@@ -91,6 +95,7 @@ const ViewCustomer: React.FC<MyComponentProps> = ({ customerId }: MyComponentPro
             customer: item.customer,
             event_type: item.event_type,
             user: item.user,
+            note: item.note,
             processed: item.processed,
             from_date: moment(item.from_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
           }

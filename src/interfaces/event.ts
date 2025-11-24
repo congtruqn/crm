@@ -5,6 +5,7 @@ export interface Events {
     user: string
     from_date: string
     to_date: string
+    note: string
     processed: string
     status: number
   }
