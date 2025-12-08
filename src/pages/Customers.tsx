@@ -113,6 +113,10 @@ const Customer: React.FC = ()=>{
       dataIndex: 'next_contact_date',
     },
     {
+      title: 'Ngày tạo',
+      dataIndex: 'create_date',
+    },
+    {
       title: '',
       key: 'edit',
       width: '15px',
@@ -148,6 +152,7 @@ const Customer: React.FC = ()=>{
             customer_evaluation: item.customer_evaluation,
             customer_status: item.customer_status,
             next_contact_date: moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
+            create_date: moment(item.create_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
           }
         })
         setData(temp);
