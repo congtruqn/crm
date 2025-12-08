@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Drawer, Modal, Table } from 'antd';
+import { Button, Drawer, Modal, Table, Tooltip } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 import apiClient from "../api/apiClient";
 import { Icon } from "@iconify/react";
@@ -14,6 +14,7 @@ interface DataType {
     name: string;
     phone_number: string;
     evaluate: string;
+    note: string;
 }
 
 
@@ -87,6 +88,11 @@ const Works: React.FC = ()=>{
     {
       title: 'Tên khách hàng',
       dataIndex: 'customer',
+      render: (text, record) => (
+        <Tooltip title={record.note}>
+            <span>{text + '...'}</span>
+        </Tooltip>
+    ),
     },
     {
       title: 'Công việc',
@@ -137,6 +143,7 @@ const Works: React.FC = ()=>{
             customer: item.customer,
             event_type: item.event_type,
             user: item.user,
+            note: item.note,
             processed: item.processed,
             from_date: moment(item.from_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
           }
