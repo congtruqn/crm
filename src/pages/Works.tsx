@@ -6,6 +6,8 @@ import { Icon } from "@iconify/react";
 import CreateEvent from "../components/event/createEvent";
 import type { Events } from "../interfaces/event";
 import moment from 'moment-timezone';
+import FilterCustomer from "../components/customer/filterCustomer";
+import { convertUnknownToStringArray } from "../utils";
 interface DataType {
     key: React.Key;
     id: string,
@@ -23,7 +25,15 @@ const Works: React.FC = ()=>{
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [id, setId] = useState('');
+  const [openFilter, setOpenFilter] = useState(false);
+  const [users, setUsers] = useState<string[]>([]);
   const [keyword, setKeyword] = useState('');
+  const showFilter = () => {
+    setOpenFilter(true);
+  };
+  const closeFilter = () => {
+    setOpenFilter(false);
+  };
   const showDrawer = () => {
     setOpen(true);
   };
@@ -36,12 +46,11 @@ const Works: React.FC = ()=>{
   };
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value || '')
-    fetchData(pageSize, 1, event.target.value || '')
   };
- const comfirmDelete = async () => {
+  const comfirmDelete = async () => {
     const response = await apiClient.delete('/event/'+id);
     if(response.status == 200){
-      fetchData(pageSize, current,keyword);
+      fetchData(pageSize, current,keyword, users);
       setOpenModal(false);
     }
   };
@@ -55,6 +64,19 @@ const Works: React.FC = ()=>{
   const handleDelete = (record: string) => {
     showModal();
     setId(record);
+  };
+  const handleFilterSubmit = (formData: unknown) => {
+      const myObject = formData as { users: string[] };
+      if(myObject?.users){
+        setUsers(convertUnknownToStringArray(myObject?.users));
+        //fetchData(pageSize, current, keyword, users);
+      } else {
+        setUsers([]);
+        //fetchData(pageSize, current, keyword, []);
+      }
+      
+      closeFilter(); // Close modal after successful submission
+      
   };
   const columns: TableColumnsType<DataType> = [
     {
@@ -103,9 +125,10 @@ const Works: React.FC = ()=>{
       ),
     },
   ];
-  const fetchData = async (pageSize: number, pageNumber: number, keyword: string) => {
+  const fetchData = async (pageSize: number, pageNumber: number, keyword: string, users: string[]) => {
     try {
-        const response = await apiClient.get('/events?pageSize='+pageSize+'&pageNumber='+pageNumber+'&keyword='+keyword); // Replace with your actual API endpoin
+        const userString: string = users.map(id => `users=${encodeURIComponent(id)}`).join('&');
+        const response = await apiClient.get('/events?pageSize='+pageSize+'&pageNumber='+pageNumber+'&keyword='+keyword+'&'+userString); // Replace with your actual API endpoin
         const temp = response.data?.data.map((item: Events, index: number) => {
           return {
             key:  item._id,
@@ -127,18 +150,18 @@ const Works: React.FC = ()=>{
   const onChange: TableProps<DataType>['onChange'] = (pagination) => {
     setPageSize(pagination.pageSize || 10);
     setCurrent(pagination.current || 1);
-    fetchData(pagination.pageSize || 0, pagination.current || 0, keyword);
+    fetchData(pagination.pageSize || 0, pagination.current || 0, keyword, users);
   }
   const handleCloseModal = () => setOpen(false);
   const handleFormSubmit = (formData: unknown) => {
     console.log('Form data submitted:', formData);
     // Perform actions with formData, e.g., API call
     handleCloseModal(); // Close modal after successful submission
-    fetchData(pageSize, current, keyword);
+    fetchData(pageSize, current, keyword, users);
   };
   useEffect(() => {
-    fetchData(10,1, '');
-  }, []);
+    fetchData(10,1, '', users);
+  }, [keyword,users]);
   return (
     <section>
       <h2 className="title">{"Danh sách công việc"}</h2>
@@ -159,6 +182,11 @@ const Works: React.FC = ()=>{
             />
           </div>
         </div>
+                <div className="form-group col-sm-2">
+                    <Button type="primary" onClick={showFilter}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd" clip-rule="evenodd"><path d="M19.5 4h-15l6 8.5V20h3v-7.5z"/><path stroke="currentColor" stroke-linecap="square" stroke-width="2" d="M19.5 4h-15l6 8.5V20h3v-7.5z"/></g></svg>
+                    </Button>
+                </div>
         <div>
           <Button type="primary" onClick={showDrawer}>
             Thêm công việc
@@ -180,6 +208,15 @@ const Works: React.FC = ()=>{
           open={open}
         >
           <CreateEvent id={id} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
+      </Drawer>
+      <Drawer
+          title="Lọc khách hàng"
+          width={300}
+          closable={true}
+          onClose={closeFilter}
+          open={openFilter}
+        >
+          <FilterCustomer onSubmitSuccess={handleFilterSubmit}/>
       </Drawer>
       <Modal
         title=""

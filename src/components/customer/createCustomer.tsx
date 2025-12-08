@@ -56,7 +56,6 @@ const CreateCustomer: React.FC<MyComponentProps> = ({ customerId, onSubmitSucces
           setValue("taxcode", temp.taxcode);
           setValue("customer_status", temp.customer_status_id);
           setValue("customer_evaluation", temp.customer_evaluation_id);
-          //setValue("next_contact_date", moment(temp.next_contact_date));
         }
         return temp;
     } catch (err) {

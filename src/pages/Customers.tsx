@@ -172,8 +172,6 @@ const Customer: React.FC = ()=>{
   };
   const handleFilterSubmit = (formData: unknown) => {
     const myObject = formData as { users: string[] };
-    //setUsers(convertUnknownToStringArray(myObject?.users || null));
-    //console.log('Form data submitted:', users);
     if(myObject?.users){
       setUsers(convertUnknownToStringArray(myObject?.users));
       //fetchData(pageSize, current, keyword, users);
@@ -213,7 +211,7 @@ const Customer: React.FC = ()=>{
             <Button type="primary" onClick={showFilter}>
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd" clip-rule="evenodd"><path d="M19.5 4h-15l6 8.5V20h3v-7.5z"/><path stroke="currentColor" stroke-linecap="square" stroke-width="2" d="M19.5 4h-15l6 8.5V20h3v-7.5z"/></g></svg>
             </Button>
-            </div>
+        </div>
         <div>
           <Button type="primary" onClick={showDrawer}>
             Thêm khách hàng
