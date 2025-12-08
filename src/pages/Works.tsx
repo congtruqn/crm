@@ -90,7 +90,7 @@ const Works: React.FC = ()=>{
       dataIndex: 'customer',
       render: (text, record) => (
         <Tooltip title={record.note}>
-            <span>{text + '...'}</span>
+            <span>{text}</span>
         </Tooltip>
     ),
     },
