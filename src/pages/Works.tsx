@@ -210,7 +210,7 @@ const Works: React.FC = ()=>{
           <CreateEvent id={id} onCancel={handleCloseModal} onSubmitSuccess={handleFormSubmit}/>
       </Drawer>
       <Drawer
-          title="Lọc khách hàng"
+          title="Lọc công việc"
           width={300}
           closable={true}
           onClose={closeFilter}
