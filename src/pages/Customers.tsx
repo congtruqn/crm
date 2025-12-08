@@ -151,8 +151,8 @@ const Customer: React.FC = ()=>{
             user: item.user,
             customer_evaluation: item.customer_evaluation,
             customer_status: item.customer_status,
-            next_contact_date: moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
-            create_date: moment(item.create_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'),
+            next_contact_date: item.create_date? moment(item.next_contact_date).tz("Asia/Bangkok").format('DD/MM/YYYY HH:mm:ss'): '',
+            create_date: moment(item.create_date).tz("Asia/Bangkok").format('DD/MM/YYYY'),
           }
         })
         setData(temp);
