@@ -21,6 +21,7 @@ interface MyComponentProps {
   onSubmitSuccess: (open: boolean) => void;
   onCancel: (open: boolean) => void; // Optional prop
 }
+const vatOptions = [0, 5, 8, 10].map((v) => ({ value: v, label: v + '%' }));
 const type0 = [
   "không",
   "một",
@@ -64,6 +65,8 @@ const currencyFormatter = (amount: number) => {
   result = result.replaceAll("mươi một", "mươi mốt");
   result = result.replaceAll("một mươi", "mười");
 
+  result = result.trim().replace(/\s+/g, " ");
+  result = result.charAt(0).toUpperCase() + result.slice(1);
   if (parseInt(strs[0], 10) === 0) return result + " đồng chẵn";
   return result + " đồng";
 };
@@ -78,6 +81,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
       email: '',
       create_date: dayjs(),
       customer_id: { value: '', label: '' },
+      vat: 0,
       amount: 0,
       text_amount: '',
       items: [{ name: '', quantity: 0, product_id: '', unit:'', price: 0, total: 0, description: ''  }] // Initial item
@@ -85,6 +89,8 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
   });
   const allLineItems = watch('items') || [];
   const grandTotal = allLineItems.reduce((acc, item) => acc + (item.total || 0), 0);
+  const vat = watch('vat') || 0;
+  const vatAmount = Math.round(grandTotal * vat / 100);
 
   const onSearch = (data : string) => {
     getProducts(data)
@@ -134,6 +140,7 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
             }));
             setValue(key, items);
             setValue('customer_id',{ value: response.data['customerId'], label: response.data?.customer?.name + ' - ' + response.data?.customer?.phone_number || '' });
+            setValue('vat', response.data['vat'] || 0);
             setValue('amount', response.data['amount']);
             setValue('text_amount', response.data['text_amount']);
           }
@@ -151,7 +158,15 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
     name: 'items'
   });
 
-  const onSubmit = async (data : unknown) => {
+  const onSubmit = async (formData : unknown) => {
+    const data = {
+      ...(formData as object),
+      is_vat: vat === 0 ? 0 : 1,
+      vat,
+      vat_price: vatAmount,
+      amount_include_vat: grandTotal + vatAmount,
+      text_amount: currencyFormatter(grandTotal + vatAmount),
+    };
     if(quoteId){
       const rep = await apiClient.put('quote/'+quoteId, data);
       if(rep.status == 200){
@@ -185,8 +200,10 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
   }, [quoteId]);
   useEffect(() => {
     setValue('amount', grandTotal);
-    setValue('text_amount', currencyFormatter(grandTotal));
   }, [grandTotal, setValue]);
+  useEffect(() => {
+    setValue('text_amount', currencyFormatter(grandTotal + vatAmount));
+  }, [grandTotal, vatAmount, setValue]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="row">
@@ -372,10 +389,26 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
             className="form-control"
           />
         </div>
+        <div className="form-group col-sm-4 pull-right">
+          <label className="col-sm-12 control-label">
+            Thuế giá trị gia tăng (VAT)
+          </label>
+          <div className="col-sm-12">
+            <Controller
+              name="vat"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} options={vatOptions} style={{ width: '100%' }} />
+              )}
+            />
+          </div>
+        </div>
         <div className="clear"></div>
         <div className="amount" >
           <div>Tổng cộng: {grandTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} đ</div>
-          <div>Tổng cộng: {currencyFormatter(grandTotal)}</div>
+          <div>Thuế VAT ({vat}%): {vatAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} đ</div>
+          <div>Tổng thanh toán: {(grandTotal + vatAmount).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} đ</div>
+          <div>Tổng cộng: {currencyFormatter(grandTotal + vatAmount)}</div>
         </div>
       </div>
       <div className="clear"></div>
