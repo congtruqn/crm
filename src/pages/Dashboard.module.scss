@@ -11,6 +11,7 @@
   .col {
     padding-left: 11px;
     padding-right: 11px;
+    margin-bottom: 22px;
 
     &.colMd4 {
       width: 33.33333%;
@@ -125,13 +126,53 @@
   border-radius: 14px;
   padding: 22px 24px;
   height: 100%;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s, box-shadow 0.2s;
+  color: #fff;
+  overflow: hidden;
   position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+  }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
+    transform: translateY(-3px);
+  }
+}
+
+.cardGreen {
+  background: linear-gradient(135deg, #1b5e20 0%, #43a047 70%, #66bb6a 100%);
+  box-shadow: 0 8px 22px rgba(46, 125, 50, 0.32);
+
+  &:hover {
+    box-shadow: 0 12px 28px rgba(46, 125, 50, 0.42);
+  }
+}
+
+.cardBlue {
+  background: linear-gradient(135deg, #0d47a1 0%, #1e88e5 70%, #42a5f5 100%);
+  box-shadow: 0 8px 22px rgba(30, 136, 229, 0.32);
+
+  &:hover {
+    box-shadow: 0 12px 28px rgba(30, 136, 229, 0.42);
+  }
+}
+
+.cardOrange {
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  color: #111827;
+
+  &:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
   }
 }
 
@@ -147,16 +188,16 @@
   font-size: 20px;
 }
 
+.cardOrange .cardIcon {
+  background: #fb8c00;
+}
+
 .cardGreen .cardIcon {
   background: #43a047;
 }
 
 .cardBlue .cardIcon {
   background: #1e88e5;
-}
-
-.cardOrange .cardIcon {
-  background: #fb8c00;
 }
 
 .cardBody {
@@ -196,7 +237,6 @@
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-  margin-bottom: 22px;
 }
 
 .panelHead {
@@ -340,31 +380,4 @@
   font-weight: 600;
   color: #111827;
   flex-shrink: 0;
-}
-
-.actions .actionsBody {
-  padding: 8px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.action {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  color: #374151;
-  font-size: 13px;
-  font-weight: 500;
-  background: #f9fafb;
-  transition: background 0.2s, color 0.2s;
-  text-decoration: none;
-
-  &:hover {
-    background: #eef2ff;
-    color: #1e40af;
-    text-decoration: none;
-  }
 }

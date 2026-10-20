@@ -45,17 +45,18 @@ const Dashboard: React.FC = () => {
 
   const fetchStats = async () => {
     try {
-      const [quoteCount, customerCount, latestQuotes] = await Promise.all([
-        apiClient.get('/quotes/count'),
-        apiClient.get('/customers/count'),
-        apiClient.get('/quotes?pageSize=5&pageNumber=1'),
+      const [quotesResponse, customersResponse] = await Promise.all([
+        apiClient.get('/quotes?pageSize=5&pageNumber=1&keyword='),
+        apiClient.get('/customers?pageSize=1&pageNumber=1&keyword='),
       ]);
+      const quotes = quotesResponse.data?.data || [];
+
       setStats({
-        quoteCount: quoteCount.data?.count || 0,
-        customerCount: customerCount.data?.count || 0,
-        latestQuotes: latestQuotes.data?.data || [],
+        quoteCount: quotesResponse.data?.count || 0,
+        customerCount: customersResponse.data?.count || 0,
+        latestQuotes: quotes,
       });
-      const total = (latestQuotes.data?.data || []).reduce((sum: number, q: QuoteItem) => sum + (q.amount || 0), 0);
+      const total = quotes.reduce((sum: number, q: QuoteItem) => sum + (q.amount || 0), 0);
       setRecentTotal(total);
     } catch (err) {
       console.error('Dashboard fetch error:', err);
@@ -203,18 +204,6 @@ const Dashboard: React.FC = () => {
                 <div>Chưa có dữ liệu</div>
               </div>
             )}
-          </section>
-
-          <section className={`${classes.panel} ${classes.actions}`}>
-            <div className={classes.panelHead}>
-              <h4><Icon icon="solar:bolt-bold" width="16" /> Thao tác nhanh</h4>
-            </div>
-            <div className={classes.actionsBody}>
-              <a href="/crm/customers" className={classes.action}><Icon icon="solar:users-group-rounded-bold" width="16" /> Khách hàng</a>
-              <a href="/crm/works" className={classes.action}><Icon icon="solar:briefcase-bold" width="16" /> Công việc</a>
-              <a href="/crm/quote" className={classes.action}><Icon icon="solar:document-text-bold" width="16" /> Tạo báo giá</a>
-              <a href="/crm/appointment" className={classes.action}><Icon icon="solar:calendar-bold" width="16" /> Lịch hẹn</a>
-            </div>
           </section>
         </div>
       </div>
