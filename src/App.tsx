@@ -20,6 +20,7 @@ import Notifications from "./pages/Notifications";
 import Customers from "./pages/Customers";
 import CustomerStatus from "./pages/CustomerStatus";
 import CustomerEvaluation from "./pages/CustomerEvaluation";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const user:User = useMyStore((state ) => state.value);
@@ -67,6 +68,7 @@ function App() {
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             <Route path="/crm/" element={<MainLayout />}>
+              <Route index element={<Dashboard />} />
               <Route path="/crm/event-types" element={<EventType />} />
               <Route path="/crm/customers" element={<Customers />} />
               <Route path="/crm/works" element={<Works />} />
