@@ -34,6 +34,13 @@ const sidebarNav = [
       text: "Analytics",
       userTypes: [2,3,4,5,6],
     },
+    {
+      link: "/crm/ai-chat",
+      section: "AI Chat",
+      icon: "solar:robot-bold",
+      text: "AI Assistant",
+      userTypes: [2],
+    },
   ];
-  
+
   export default sidebarNav;

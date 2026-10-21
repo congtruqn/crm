@@ -21,6 +21,7 @@ import Customers from "./pages/Customers";
 import CustomerStatus from "./pages/CustomerStatus";
 import CustomerEvaluation from "./pages/CustomerEvaluation";
 import Dashboard from "./pages/Dashboard";
+import AIChat from "./pages/AIChat";
 
 function App() {
   const user:User = useMyStore((state ) => state.value);
@@ -77,6 +78,7 @@ function App() {
               <Route path="/crm/notifications" element={<Notifications />} />
               <Route path="/crm/customer-status" element={<CustomerStatus />} />
               <Route path="/crm/customer-evaluations" element={<CustomerEvaluation />} />
+              <Route path="/crm/ai-chat" element={<AIChat />} />
             </Route>
           </Routes>
         </Suspense>
