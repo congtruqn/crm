@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   deploy-dev:
     machine:
-      image: ubuntu-2204:2023.07.2
+      image: ubuntu-2204:2024.05.1
     steps:
       - run:
           name: Deploy Over SSH
