@@ -28,6 +28,20 @@ const AIChat: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
+  const extractAiText = (data: any): string => {
+    if (!data) return "";
+    if (typeof data.reply === "string") return data.reply;
+    if (Array.isArray(data.content)) {
+      return data.content
+        .filter((b: any) => b && b.type === "text")
+        .map((b: any) => b.text || "")
+        .join("");
+    }
+    if (typeof data.content === "string") return data.content;
+    if (typeof data.message === "string") return data.message;
+    return "";
+  };
+
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -61,7 +75,6 @@ const AIChat: React.FC = () => {
         },
         body: JSON.stringify({
           model: model,
-          stream: true,
           messages: [...messages, userMessage].map((msg) => ({
             role: msg.role,
             content: msg.content,
@@ -104,13 +117,14 @@ const AIChat: React.FC = () => {
       };
 
       const contentType = response.headers.get("content-type") || "";
-      if (!contentType.includes("text/event-stream") || !response.body) {
+      if (contentType.includes("application/json") || !response.body) {
         const data = await response.json();
-        updateAssistant(data.content?.[0]?.text || data.message || "No response");
+        const text = extractAiText(data);
+        updateAssistant(text || "No response");
         return;
       }
 
-      // SSE: accumulate data lines
+      // Trường hợp server trả về SSE trực tiếp (phụ cases triển khai)
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
@@ -158,6 +172,7 @@ const AIChat: React.FC = () => {
       setLoading(false);
     }
   };
+
 
   const clearHistory = () => {
     setMessages([]);
