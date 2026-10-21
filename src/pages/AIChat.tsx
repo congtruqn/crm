@@ -28,13 +28,15 @@ const AIChat: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const extractAiText = (data: any): string => {
+  const extractAiText = (data: Record<string, unknown>): string => {
     if (!data) return "";
     if (typeof data.reply === "string") return data.reply;
     if (Array.isArray(data.content)) {
       return data.content
-        .filter((b: any) => b && b.type === "text")
-        .map((b: any) => b.text || "")
+        .filter((b): b is { type: string; text?: string } =>
+          !!b && typeof b === "object" && b.type === "text"
+        )
+        .map((b) => b.text || "")
         .join("");
     }
     if (typeof data.content === "string") return data.content;
@@ -72,6 +74,7 @@ const AIChat: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + authToken.trim(),
+          "Accept": "text/event-stream",
         },
         body: JSON.stringify({
           model: model,
@@ -79,6 +82,7 @@ const AIChat: React.FC = () => {
             role: msg.role,
             content: msg.content,
           })),
+          stream: true,
         }),
       });
 
@@ -117,51 +121,105 @@ const AIChat: React.FC = () => {
       };
 
       const contentType = response.headers.get("content-type") || "";
-      if (contentType.includes("application/json") || !response.body) {
+
+      // Handle SSE stream (event: <type>\ndata: <json>\n\n blocks) or JSON response
+      if (contentType.includes("text/event-stream") && response.body) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let roundText = "";
+        // Thông báo tool_call/tool_result được giữ riêng vì mỗi "round" mới sẽ
+        // ghi đè roundText (là nội dung text đầy đủ của lượt đó), không phải phần nối thêm.
+        const notices: string[] = [];
+        let toolCalled = false;
+
+        const render = () => {
+          const parts = [roundText, ...notices].filter(Boolean);
+          updateAssistant(parts.join("\n\n"));
+        };
+
+        const handleEvent = (eventName: string, payload: string) => {
+          if (!payload || payload === "[DONE]") return;
+          let parsed: Record<string, unknown>;
+          try {
+            parsed = JSON.parse(payload);
+          } catch (parseErr) {
+            if (!(parseErr instanceof SyntaxError)) throw parseErr;
+            return;
+          }
+
+          if (eventName === "error") {
+            const msg = (parsed.msg as string) || (parsed.error as Record<string, unknown>)?.message as string || "AI stream error";
+            throw new Error(msg);
+          } else if (eventName === "round") {
+            const text = parsed.text as string;
+            if (text) {
+              roundText = text;
+              render();
+            }
+          } else if (eventName === "tool_call") {
+            toolCalled = true;
+            notices.push(`🔧 Đang gọi tool: ${parsed.name as string}...`);
+            render();
+          } else if (eventName === "tool_result") {
+            const resultContent = (parsed.content as string) || "";
+            const toolName = parsed.name as string;
+            if (toolName === "create_news_content") {
+              if (!parsed.is_error) {
+                message.success("Bài viết đã được tạo thành công!");
+                notices.push(`✅ ${resultContent}`);
+              } else {
+                message.error(`Tạo bài viết thất bại: ${resultContent}`);
+                notices.push(`❌ ${resultContent}`);
+              }
+              render();
+            }
+          } else if (eventName === "done") {
+            const finalText = extractAiText(parsed);
+            if (finalText) {
+              roundText = finalText;
+              render();
+            }
+          }
+        };
+
+        const processBuffer = () => {
+          const blocks = buffer.split("\n\n");
+          buffer = blocks.pop() || "";
+          for (const block of blocks) {
+            let eventName = "";
+            const dataLines: string[] = [];
+            for (const rawLine of block.split("\n")) {
+              const line = rawLine.trim();
+              if (!line) continue;
+              if (line.startsWith("event:")) eventName = line.slice(6).trim();
+              else if (line.startsWith("data:")) dataLines.push(line.slice(5).trim());
+            }
+            if (dataLines.length) handleEvent(eventName, dataLines.join("\n"));
+          }
+        };
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          processBuffer();
+        }
+
+        // Flush phần còn lại nếu stream không kết thúc bằng dòng trống
+        if (buffer.trim()) {
+          buffer += "\n\n";
+          processBuffer();
+        }
+
+        if (!roundText && !toolCalled) {
+          throw new Error("Empty response from AI");
+        }
+      } else {
+        // Fallback: JSON response
         const data = await response.json();
         const text = extractAiText(data);
         updateAssistant(text || "No response");
-        return;
-      }
-
-      // Trường hợp server trả về SSE trực tiếp (phụ cases triển khai)
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let assistantContent = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
-
-        for (const line of lines) {
-          if (!line.startsWith("data:")) continue;
-          const payload = line.slice(5).trim();
-          if (!payload || payload === "[DONE]") continue;
-          try {
-            const parsed = JSON.parse(payload);
-            if (parsed.type === "error") {
-              throw new Error(parsed.error?.message || "AI stream error");
-            }
-            const delta =
-              parsed.type === "content_block_delta" ? parsed.delta?.text : parsed.choices?.[0]?.delta?.content;
-            if (delta) {
-              assistantContent += delta;
-              updateAssistant(assistantContent);
-            }
-          } catch (parseErr) {
-            if (parseErr instanceof SyntaxError) continue;
-            throw parseErr;
-          }
-        }
-      }
-
-      if (!assistantContent) {
-        throw new Error("Empty response from AI");
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Failed to get response from AI";
