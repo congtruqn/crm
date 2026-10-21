@@ -46,7 +46,7 @@ const AIChat: React.FC = () => {
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -275,12 +275,15 @@ const AIChat: React.FC = () => {
         ))}
 
         {loading && (
-          <div className={`${classes.message} ${classes.assistant}`}>
+          <div className={`${classes.message} ${classes.assistant} ${classes.typing}`}>
             <div className={classes.messageIcon}>
               <Icon icon="solar:robot-bold" width="20" />
             </div>
             <div className={classes.messageContent}>
-              <Spin size="small" />
+              <div className={classes.typingContent}>
+                <Spin size="small" className={classes.spin} />
+                <span>AI đang trả lời…</span>
+              </div>
             </div>
           </div>
         )}
@@ -302,6 +305,7 @@ const AIChat: React.FC = () => {
           onPressEnter={(e) => {
             if (e.shiftKey) return;
             e.preventDefault();
+            if (loading) return;
             sendMessage(e);
           }}
           placeholder="Type your message... (Shift+Enter for new line)"
