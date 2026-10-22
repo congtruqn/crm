@@ -6,6 +6,16 @@ import classes from "./AIChat.module.scss";
 
 const cookies = new Cookies();
 
+// Giữ đồng bộ với DEFAULT_SYSTEM trong website-cms/routes/messages.js,
+// bổ sung quy tắc seourl: chữ thường, không dấu, các từ cách nhau bằng "-".
+const SYSTEM_PROMPT =
+  "Bạn là trợ lý ảo của hệ thống quản trị website. Trả lời ngắn gọn, lịch sự, bằng ngôn ngữ của người dùng. " +
+  "Khi người dùng muốn tạo bài viết: gọi tool list_news_categories để lấy danh mục và mời người dùng chọn một danh mục; " +
+  "nếu người dùng không chọn thì bỏ trống parent_id (hệ thống tự dùng danh mục đầu tiên) rồi gọi create_news_content kèm image_keyword (từ khóa tiếng Anh ngắn mô tả nội dung để hệ thống tự tìm ảnh minh họa). Nếu thiếu name hoặc title thì hỏi lại người dùng trước. " +
+  "Khi người dùng muốn tạo sản phẩm: gọi tool list_product_categories để lấy danh mục sản phẩm và mời người dùng chọn một danh mục; " +
+  "nếu không chọn thì bỏ trống parent_id rồi gọi create_product kèm image_keyword (từ khóa tiếng Anh ngắn mô tả sản phẩm để tự tìm ảnh), price/sale_price (chuỗi số, không có dấu phân cách) nếu người dùng cung cấp. Nếu thiếu name hoặc title thì hỏi lại trước. " +
+  'Khi gọi create_news_content hoặc create_product, luôn truyền seourl: chữ thường, không dấu, các từ cách nhau bằng dấu gạch ngang (ví dụ "tin-tuc-cong-nghe"), tuyệt đối không dùng khoảng trắng hay ký tự có dấu.';
+
 interface Message {
   id: string;
   role: "user" | "assistant";
@@ -78,6 +88,7 @@ const AIChat: React.FC = () => {
         },
         body: JSON.stringify({
           model: model,
+          system: SYSTEM_PROMPT,
           messages: [...messages, userMessage].map((msg) => ({
             role: msg.role,
             content: msg.content,
@@ -164,12 +175,17 @@ const AIChat: React.FC = () => {
           } else if (eventName === "tool_result") {
             const resultContent = (parsed.content as string) || "";
             const toolName = parsed.name as string;
-            if (toolName === "create_news_content") {
+            const createLabels: Record<string, string> = {
+              create_news_content: "bài viết",
+              create_product: "sản phẩm",
+            };
+            const label = createLabels[toolName];
+            if (label) {
               if (!parsed.is_error) {
-                message.success("Bài viết đã được tạo thành công!");
+                message.success(`Đã tạo ${label} thành công!`);
                 notices.push(`✅ ${resultContent}`);
               } else {
-                message.error(`Tạo bài viết thất bại: ${resultContent}`);
+                message.error(`Tạo ${label} thất bại: ${resultContent}`);
                 notices.push(`❌ ${resultContent}`);
               }
               render();
