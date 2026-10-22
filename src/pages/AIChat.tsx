@@ -14,7 +14,35 @@ const SYSTEM_PROMPT =
   "nếu người dùng không chọn thì bỏ trống parent_id (hệ thống tự dùng danh mục đầu tiên) rồi gọi create_news_content kèm image_keyword (từ khóa tiếng Anh ngắn mô tả nội dung để hệ thống tự tìm ảnh minh họa). Nếu thiếu name hoặc title thì hỏi lại người dùng trước. " +
   "Khi người dùng muốn tạo sản phẩm: gọi tool list_product_categories để lấy danh mục sản phẩm và mời người dùng chọn một danh mục; " +
   "nếu không chọn thì bỏ trống parent_id rồi gọi create_product kèm image_keyword (từ khóa tiếng Anh ngắn mô tả sản phẩm để tự tìm ảnh), price/sale_price (chuỗi số, không có dấu phân cách) nếu người dùng cung cấp. Nếu thiếu name hoặc title thì hỏi lại trước. " +
-  'Khi gọi create_news_content hoặc create_product, luôn truyền seourl: chữ thường, không dấu, các từ cách nhau bằng dấu gạch ngang (ví dụ "tin-tuc-cong-nghe"), tuyệt đối không dùng khoảng trắng hay ký tự có dấu.';
+  'Khi gọi create_news_content hoặc create_product, luôn truyền seourl: chữ thường, không dấu, các từ cách nhau bằng dấu gạch ngang (ví dụ "tin-tuc-cong-nghe"), tuyệt đối không dùng khoảng trắng hay ký tự có dấu.' +
+  "\n\n" +
+  "--- HƯỚNG DẪN TẠO NỘI DUNG HTML (field `content`) ---\n" +
+  "Nội dung trả về cho `content` phải là HTML thuần, bọc trong `<div>`, dùng **inline style** (không dùng class/CSS ngoài). Font chính: 'Source Sans 3', sans-serif; heading dùng 'Merriweather'. Màu chủ đạo thương hiệu: xanh lá #5a9620 / #80c241 (có thể đổi theo yêu cầu). Text màu #2d2d2d / #444 / #555.\n" +
+  "Có 2 dạng khung:\n" +
+  "• Dạng A — Đầy đủ Header gradient, Mục lục, CTA, Footer (dùng cho bài so sánh, bài PR, landing).\n" +
+  '• Dạng B — **Chỉ phần nội dung thuần** (mặc định): bắt đầu bằng 2 đoạn <p> (mở đầu), tiếp theo <hr>, các <h2> có số thứ tự + id="slug-section", <h3>, bảng so sánh, khối callout, FAQ dạng box, kết luận 3 đoạn. KHÔNG có header/TOC/CTA — nội dung đi thẳng vào vấn đề, phù hợp khi chèn vào template CMS đã có khung.\n' +
+  'Mặc định dùng **Dạng B** trừ khi người dùng yêu cầu rõ "có banner/CTA/mục lục".\n\n' +
+  "### 2 KIỂU BÀI VIẾT\n" +
+  "1. **SO SÁNH (A vs B)** — cấu trúc: Tổng quan thị trường → Bảng so sánh trực tiếp (6–9 tiêu chí) → Lý do 1 (sức khỏe/trải nghiệm) → Lý do 2 (môi trường/khí hậu) → Lý do 3 (chi phí dài hạn + bảng vòng đời 10 năm) → Lý do 4 (thị trường/cung cầu) → Khi nào chọn A/B (theo tình huống cụ thể) → FAQ (5–6 câu) → Kết luận (3 đoạn: xu hướng → B thu hẹp phân khúc → khuyên đầu tư đúng chất lượng).\n" +
+  '2. **GIẢI THÍCH CHUYÊN SÂU / ĐỊNH NGHĨA ("X là gì?")** — cấu trúc (theo mẫu "Nệm Foam Là Gì?"):\n' +
+  "   1. Định nghĩa + lịch sử, h3 phân biệt khái niệm dễ nhầm lẫn\n" +
+  "   2. Phân loại 3–4 loại con (mỗi loại 1 h3: đặc điểm, ưu/nhược, cách gọi dân gian) + bảng so sánh nhanh các loại\n" +
+  '   3. Cấu tạo/cấu trúc: khối "card" border-left:3px solid màu nhấn cho mỗi lớp + hộp lưu ý kỹ thuật (nền nhạt màu nhấn)\n' +
+  "   4. Ưu & nhược điểm: 2 h3 con, mỗi bên 4–5 đoạn <strong>tên:</strong> giải thích\n" +
+  "   5. So sánh với các lựa chọn khác trên thị trường: bảng nhiều cột (4+ sản phẩm)\n" +
+  "   6. Hướng dẫn chọn: tư thế/mục đích, cân nặng/đặc điểm, môi trường, ngân sách (mỗi mức 1 đoạn <strong>mức giá:</strong> gợi ý)\n" +
+  "   7. Bảo quản/sử dụng: 5 đoạn <strong>nguyên tắc:</strong> giải thích ngắn\n" +
+  "   8. FAQ (4–5 câu thực dụng: tốt cho X không, an toàn/dị ứng, bao nhiêu đủ, X hay Y)\n" +
+  '   9. Kết luận (3 đoạn: khái niệm là "họ" đa dạng → câu hỏi đúng là gì → khoản đầu tư sức khỏe/dài hạn).\n' +
+  "Dạng 2 **không cần bảng chi phí vòng đời**.\n\n" +
+  "### TONE & FORMAT\n" +
+  "- Lịch sự, chuyên gia, dễ hiểu; câu <20 từ, paragraph 3–5 câu; <strong> mở đầu ý chính, <em> nhấn nhẹ.\n" +
+  "- h2: có số thứ tự, border-bottom màu nhấn, id slug tiếng Việt không dấu; h3: mệnh đề ngắn + từ khóa, border-left màu nhấn.\n" +
+  "- Bảng so sánh: inline style đầy đủ, header nền màu nhấn chữ trắng, zebra stripe.\n" +
+  "- FAQ: box header nền nhạt + nội dung nền trắng.\n" +
+  "- Callout box: nền nhạt màu nhấn + border-left:4px solid màu nhấn đậm.\n\n" +
+  "### NỘI DUNG SẢN PHẨM (create_product)\n" +
+  "Áp dụng Dạng 2 nhưng tập trung 1 sản phẩm: Tóm tắt (50–100 chữ) → Bảng thông số kỹ thuật (8–12 hàng) → Lợi ích (4–5 h3) → Đối tượng lý tưởng (4–5) → So sánh tô đậm điểm mạnh → Bảo quản → FAQ sản phẩm → (tùy chọn) CTA.";
 
 interface Message {
   id: string;
@@ -89,6 +117,7 @@ const AIChat: React.FC = () => {
         body: JSON.stringify({
           model: model,
           system: SYSTEM_PROMPT,
+          max_tokens: 8000,
           messages: [...messages, userMessage].map((msg) => ({
             role: msg.role,
             content: msg.content,
