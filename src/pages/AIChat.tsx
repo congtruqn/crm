@@ -117,7 +117,6 @@ const AIChat: React.FC = () => {
         body: JSON.stringify({
           model: model,
           system: SYSTEM_PROMPT,
-          max_tokens: 8000,
           messages: [...messages, userMessage].map((msg) => ({
             role: msg.role,
             content: msg.content,
@@ -172,6 +171,7 @@ const AIChat: React.FC = () => {
         // ghi đè roundText (là nội dung text đầy đủ của lượt đó), không phải phần nối thêm.
         const notices: string[] = [];
         let toolCalled = false;
+        let streamText = "";
 
         const render = () => {
           const parts = [roundText, ...notices].filter(Boolean);
@@ -191,7 +191,16 @@ const AIChat: React.FC = () => {
           if (eventName === "error") {
             const msg = (parsed.msg as string) || (parsed.error as Record<string, unknown>)?.message as string || "AI stream error";
             throw new Error(msg);
+          } else if (eventName === "delta") {
+            // Text AI sinh ra đến đâu hiển thị đến đó; round/done sẽ ghi đè bằng text đầy đủ
+            const text = parsed.text as string;
+            if (text) {
+              streamText += text;
+              roundText = streamText;
+              render();
+            }
           } else if (eventName === "round") {
+            streamText = "";
             const text = parsed.text as string;
             if (text) {
               roundText = text;
