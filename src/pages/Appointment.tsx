@@ -86,8 +86,8 @@ const Appointment: React.FC = ()=>{
           return {
             id: item._id,
             text: "Event 1",
-            start: moment(item.from_date).tz("Asia/Bangkok").add(7,'hours').format(),
-            end: moment(item.to_date).tz("Asia/Bangkok").add(7,'hours').format(),
+            start: moment(item.from_date).tz("Asia/Bangkok").format(),
+            end: moment(item.to_date).tz("Asia/Bangkok").format(),
             html: `Khách hàng: ${item.customer} <br> ${item.event_type}`
           }
         })
