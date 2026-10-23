@@ -24,10 +24,19 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
   const [evenTypes, setEvenTypes] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [customers, setCustomers] = useState([]);
+  // Giờ lấy từ "Ngày thực hiện"; chỉ dùng khoảng chọn trên lịch để suy ra thời lượng (phút)
+  const calcDuration = () => {
+    const minutes = dayjs(to).diff(dayjs(from), 'minute');
+    return from && to && minutes > 0 ? minutes : 30;
+  };
+  // Mở form từ lịch: đặt sẵn ngày giờ theo ô đã chọn
+  useEffect(() => {
+    if (!id && from) setValue("event_date", dayjs(from));
+  }, [id, from, setValue]);
   const onSubmit = async (data : unknown) => {
     if(id){
       if(typeof data == 'object'){
-        const rep = await apiClient.put('event/'+id, { from, to, ...data });
+        const rep = await apiClient.put('event/'+id, { duration: calcDuration(), ...data });
         if(rep.status == 200){
           reset();
         }
@@ -35,7 +44,7 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
     }
     else{
       if(typeof data == 'object'){
-        const rep = await apiClient.post('event', { from, to, ...data });
+        const rep = await apiClient.post('event', { duration: calcDuration(), ...data });
         if(rep.status == 200){
           reset();
         }
