@@ -98,12 +98,45 @@
       &__txt {
         white-space: nowrap;
       }
+
+      // Ẩn chữ menu khi sidebar đóng, chỉ hiện icon
+      .sidebar_close & {
+        &__txt {
+          display: none;
+        }
+      }
     }
   }
 }
 
 .logout {
   align-self: flex-end;
+}
+
+// Menu bay ra bên phải khi sidebar đóng (Tooltip render qua portal nên nằm ngoài .sidebar)
+.sidebar__flyout {
+  :global(.ant-tooltip-inner) {
+    background: #2d353c;
+    padding: 0;
+    border-radius: 4px;
+    min-width: 120px;
+  }
+  :global(.ant-tooltip-arrow)::before {
+    background: #2d353c;
+  }
+}
+
+.sidebar__flyout__list {
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+
+  li {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #ebebeb;
+    white-space: nowrap;
+  }
 }
 
 html[dir="rtl"] {

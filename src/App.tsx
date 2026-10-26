@@ -22,6 +22,7 @@ import CustomerStatus from "./pages/CustomerStatus";
 import CustomerEvaluation from "./pages/CustomerEvaluation";
 import Dashboard from "./pages/Dashboard";
 import AIChat from "./pages/AIChat";
+import { SidebarContextProvider } from "./store/sidebarContext";
 
 function App() {
   const user:User = useMyStore((state ) => state.value);
@@ -67,20 +68,22 @@ function App() {
       <LoadingProvider>
         <GlobalLoader></GlobalLoader>
         <Suspense fallback={<LoadingSpinner />}>
-          <Routes>
-            <Route path="/crm/" element={<MainLayout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="/crm/event-types" element={<EventType />} />
-              <Route path="/crm/customers" element={<Customers />} />
-              <Route path="/crm/works" element={<Works />} />
-              <Route path="/crm/quote" element={<Quotes />} />
-              <Route path="/crm/appointment" element={<Appointment />} />
-              <Route path="/crm/notifications" element={<Notifications />} />
-              <Route path="/crm/customer-status" element={<CustomerStatus />} />
-              <Route path="/crm/customer-evaluations" element={<CustomerEvaluation />} />
-              <Route path="/crm/ai-chat" element={<AIChat />} />
-            </Route>
-          </Routes>
+          <SidebarContextProvider>
+            <Routes>
+              <Route path="/crm/" element={<MainLayout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="/crm/event-types" element={<EventType />} />
+                <Route path="/crm/customers" element={<Customers />} />
+                <Route path="/crm/works" element={<Works />} />
+                <Route path="/crm/quote" element={<Quotes />} />
+                <Route path="/crm/appointment" element={<Appointment />} />
+                <Route path="/crm/notifications" element={<Notifications />} />
+                <Route path="/crm/customer-status" element={<CustomerStatus />} />
+                <Route path="/crm/customer-evaluations" element={<CustomerEvaluation />} />
+                <Route path="/crm/ai-chat" element={<AIChat />} />
+              </Route>
+            </Routes>
+          </SidebarContextProvider>
         </Suspense>
       </LoadingProvider>
     </BrowserRouter>

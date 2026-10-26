@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useWindowSize } from "usehooks-ts";
+import { Tooltip } from "antd";
 import sidebarNav from "../../config/sidebarNav";
 import SidebarContext from "../../store/sidebarContext";
 import { Icon } from "@iconify/react";
@@ -43,24 +44,42 @@ function Sidebar() {
         <img src={import.meta.env.VITE_BASE_URL+'/static/'+value.website_logo} alt="digikala" />
       </div>
       <div className={classes.sidebar__menu}>
-        {sidebarNav.map((nav, index) => (
-          nav.userTypes.includes(value.type) ? 
-          <Link
-            to={nav.link}
-            key={`nav-${index}`}
-            className={`${classes.sidebar__menu__item} ${
-              activeIndex === index && classes.active
-            }`}
-            onClick={openSidebarHandler}
-          >
-            <div className={classes.sidebar__menu__item__icon}>
-              <Icon icon={nav.icon} />
-            </div>
-            <div className={classes.sidebar__menu__item__txt}>
-              {nav.section}
-            </div>
-          </Link> : null
-        ))}
+        {sidebarNav.map((nav, index) => {
+          if (!nav.userTypes.includes(value.type)) return null;
+          const link = (
+            <Link
+              to={nav.link}
+              className={`${classes.sidebar__menu__item} ${
+                activeIndex === index && classes.active
+              }`}
+              onClick={openSidebarHandler}
+            >
+              <div className={classes.sidebar__menu__item__icon}>
+                <Icon icon={nav.icon} />
+              </div>
+              <div className={classes.sidebar__menu__item__txt}>
+                {nav.section}
+              </div>
+            </Link>
+          );
+          // Khi sidebar đóng, hover hiện menu bên phải (dạng ul/li) qua Tooltip portal
+          return sidebarCtx.isOpen ? (
+            <span key={`nav-${index}`}>{link}</span>
+          ) : (
+            <Tooltip
+              key={`nav-${index}`}
+              placement="right"
+              classNames={{ root: classes.sidebar__flyout }}
+              title={
+                <ul className={classes.sidebar__flyout__list}>
+                  <li>{nav.section}</li>
+                </ul>
+              }
+            >
+              {link}
+            </Tooltip>
+          );
+        })}
       </div>
 
       <div className={[classes.sidebar__menu, classes.logout].join("")}>
