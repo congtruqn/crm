@@ -143,6 +143,9 @@ const CreateQuote: React.FC<MyComponentProps> = ({ quoteId , onSubmitSuccess, on
             setValue('vat', response.data['vat'] || 0);
             setValue('amount', response.data['amount']);
             setValue('text_amount', response.data['text_amount']);
+            if (response.data.create_date) {
+              setValue('create_date', dayjs(response.data.create_date));
+            }
           }
         }
     } catch (err) {
