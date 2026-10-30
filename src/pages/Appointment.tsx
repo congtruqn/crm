@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import {DayPilot, DayPilotCalendar} from "@daypilot/daypilot-lite-react";
 import { Drawer } from 'antd';
 import moment from 'moment-timezone';
@@ -11,16 +11,19 @@ import { useDateStore } from "../store/dateStore";
 const Appointment: React.FC = ()=>{ 
   const { setFrom, setTo } = useDateStore();
   const [calendar, setCalendar] = useState<DayPilot.Calendar>();
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // DayPilot đọc chuỗi ngày giờ theo đúng ký tự (bỏ qua Z/offset), nên phải truyền
+  // giờ địa phương (Asia/Bangkok) không có hậu tố UTC, giống cách format cho events bên dưới.
+  const toLocalWallClock = useCallback((m: moment.Moment) => m.tz("Asia/Bangkok").format("YYYY-MM-DDTHH:mm:ss"), []);
   const startOfWeek = moment().startOf('isoWeek');
   const endOfWeek = moment().endOf('isoWeek');
-  const startOfWeekISO = startOfWeek.toISOString();
-  const endOfWeekISO = endOfWeek.toISOString();
-  const [fromDate, setFromDate] = useState(startOfWeekISO);
-  const [toDate, setToDate] = useState(endOfWeekISO);
-  const [startDate, setStartDate] = useState(startOfWeek.toISOString());
-  let currentHour = moment().hour();
+  const startOfWeekLocal = toLocalWallClock(startOfWeek);
+  const endOfWeekLocal = toLocalWallClock(endOfWeek);
+  const [fromDate, setFromDate] = useState(startOfWeekLocal);
+  const [toDate, setToDate] = useState(endOfWeekLocal);
+  const [startDate, setStartDate] = useState(startOfWeekLocal);
+  let currentHour = moment().tz("Asia/Bangkok").hour();
   if(currentHour > 15){
     currentHour = 15
   }
@@ -43,14 +46,16 @@ const Appointment: React.FC = ()=>{
     setIsModalOpen(false);
   };
   const previous = () => {
-    setStartDate(moment(startDate).subtract(7,'days').toISOString());
-    setFromDate(moment(startDate).subtract(7,'days').toISOString())
+    // startDate là chuỗi giờ địa phương (không có Z) nên moment() parse đúng giờ wall-clock,
+    // chỉ format lại cùng kiểu naive-local, không dùng toISOString() (sẽ lại bị lệch múi giờ).
+    setStartDate(toLocalWallClock(moment(startDate).subtract(7,'days')));
+    setFromDate(toLocalWallClock(moment(startDate).subtract(7,'days')))
     setToDate(startDate)
   };
   const next = () => {
-    setStartDate(moment(startDate).add(7,'days').toISOString());
-    setFromDate(moment(startDate).add(7,'days').toISOString())
-    setToDate(moment(startDate).add(14,'days').toISOString())
+    setStartDate(toLocalWallClock(moment(startDate).add(7,'days')));
+    setFromDate(toLocalWallClock(moment(startDate).add(7,'days')))
+    setToDate(toLocalWallClock(moment(startDate).add(14,'days')))
   };
 
 
@@ -78,7 +83,7 @@ const Appointment: React.FC = ()=>{
   };
 
 
-  const fetchData = async (calendar: DayPilot.Calendar | undefined, fromDate: string, toDate: string) => {
+  const fetchData = useCallback(async (calendar: DayPilot.Calendar | undefined, fromDate: string, toDate: string) => {
     try {
         const response = await apiClient.get('/get-event-by-date?fromDate='+fromDate+'&toDate='+toDate); // Replace with your actual API endpoin
         //console.log(response.data?.data);
@@ -86,8 +91,8 @@ const Appointment: React.FC = ()=>{
           return {
             id: item._id,
             text: "Event 1",
-            start: moment(item.from_date).tz("Asia/Bangkok").format(),
-            end: moment(item.to_date).tz("Asia/Bangkok").format(),
+            start: toLocalWallClock(moment(item.from_date)),
+            end: toLocalWallClock(moment(item.to_date)),
             html: `Khách hàng: ${item.customer} <br> ${item.event_type}`
           }
         })
@@ -98,12 +103,12 @@ const Appointment: React.FC = ()=>{
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [toLocalWallClock]);
 
   console.log(currentHour)
   useEffect(() => {
     fetchData(calendar, fromDate, toDate)
-}, [calendar, startDate]);
+}, [calendar, fromDate, toDate, fetchData]);
   return (
     <section>
       <h2 className="title">{"Lịch"}</h2>

@@ -15,7 +15,8 @@
     background: #d9e0e7;
     transition: all 0.5s ease-in-out;
     &.close_sidebar {
-      padding: 1rem 2.5rem 1rem 6rem;
+      // Sidebar đóng rộng 50px (fixed), chừa 10px gap bên trái; phải 10px. Bỏ top/bottom để header không bị đẩy xuống.
+      padding: 0 10px 0 60px;
     }
   }
 }
@@ -24,7 +25,7 @@ html[dir="rtl"] {
   .main__content {
     padding: 1rem 17rem 1rem 2.5rem;
     &.close_sidebar {
-      padding: 1rem 6rem 1rem 2rem;
+      padding: 0 60px 0 10px;
     }
   }
 }

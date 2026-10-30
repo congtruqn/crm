@@ -37,7 +37,7 @@ const sidebarNav = [
     {
       link: "/crm/ai-chat",
       section: "AI Chat",
-      icon: "solar:robot-bold",
+      icon: "lucide:bot",
       text: "AI Assistant",
       userTypes: [2],
     },

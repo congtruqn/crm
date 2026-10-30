@@ -29,10 +29,6 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
     const minutes = dayjs(to).diff(dayjs(from), 'minute');
     return from && to && minutes > 0 ? minutes : 30;
   };
-  // Mở form từ lịch: đặt sẵn ngày giờ theo ô đã chọn
-  useEffect(() => {
-    if (!id && from) setValue("event_date", dayjs(from));
-  }, [id, from, setValue]);
   const onSubmit = async (data : unknown) => {
     if(id){
       if(typeof data == 'object'){
@@ -133,10 +129,12 @@ const CreateEvent: React.FC<MyComponentProps> = ({ id, onSubmitSuccess, onCancel
       getData(id);
     }
     else{
-      reset();
+      // Mở form từ lịch: đặt sẵn ngày giờ theo ô đã chọn. Gộp vào reset() để reset không xoá mất ngày
+      // (onSubmitSuccess đổi tham chiếu mỗi lần render cha nên effect này chạy lại liên tục).
+      reset({ event_date: from ? dayjs(from) : dayjs() });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, onSubmitSuccess]);
+  }, [id, from, onSubmitSuccess]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
